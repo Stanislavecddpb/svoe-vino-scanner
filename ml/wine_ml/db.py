@@ -62,4 +62,5 @@ def fetch_embeddings(conn: psycopg.Connection, model: str) -> tuple[list[str], n
         rows = cur.fetchall()
     if not rows:
         return [], np.zeros((0, 0), np.float32)
-    return [r[0] for r in rows], np.stack([np.asarray(r[1], np.float32) for r in rows])
+    vecs = [r[1].to_numpy() if hasattr(r[1], "to_numpy") else np.asarray(r[1]) for r in rows]
+    return [r[0] for r in rows], np.stack(vecs).astype(np.float32)
