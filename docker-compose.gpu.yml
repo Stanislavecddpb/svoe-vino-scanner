@@ -1,0 +1,10 @@
+# GPU override for the ml service (needs NVIDIA driver + Docker Desktop WSL2 GPU support).
+services:
+  ml:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

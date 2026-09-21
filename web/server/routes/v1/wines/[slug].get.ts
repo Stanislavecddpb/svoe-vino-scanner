@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
       throw new ApiError(503, `database error: ${(e as Error).message}`)
     }
     if (!rows.length) throw new ApiError(404, `wine "${slug}" not found`)
-    return rows[0]
+    return { ...rows[0], image_url: `/v1/images/${encodeURIComponent(rows[0].image_file)}` }
   }
   catch (e) {
     return sendApiError(event, e)

@@ -1,3 +1,8 @@
+# Full stack: postgres(pgvector) + ml (SigLIP 2) + web (Nuxt API on :8080).
+#   docker compose up -d db                                     # only Postgres (local dev)
+#   docker compose --profile full up -d --build                 # whole stack, ml on CPU
+#   docker compose -f docker-compose.yml -f docker-compose.gpu.yml --profile full up -d --build  # ml on GPU
+# Catalog + index must be built once (see README: scripts/setup.ps1 or the ml scripts).
 services:
   db:
     image: pgvector/pgvector:pg16
@@ -15,5 +20,39 @@ services:
       interval: 3s
       retries: 20
 
+  ml:
+    build: ./ml
+    profiles: ["full"]
+    environment:
+      MODEL_NAME: ${MODEL_NAME:-google/siglip2-so400m-patch14-384}
+      DEVICE: ${DEVICE:-auto}
+      DATABASE_URL: postgresql://wine:wine@db:5432/wine
+    ports:
+      - "8001:8001"
+    volumes:
+      - hf-cache:/hf-cache
+      - ./data:/app/data
+
+  web:
+    build: ./web
+    profiles: ["full"]
+    environment:
+      ENGINE: ${ENGINE:-vector}
+      ML_URL: http://ml:8001
+      DATABASE_URL: postgresql://wine:wine@db:5432/wine
+      MODEL_NAME: ${MODEL_NAME:-google/siglip2-so400m-patch14-384}
+      CONFIDENCE_MARGIN: ${CONFIDENCE_MARGIN:-0.03}
+      CATALOG_IMAGES_DIR: /data/catalog/images
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data/catalog/images:/data/catalog/images:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      ml:
+        condition: service_healthy
+
 volumes:
   pgdata:
+  hf-cache:

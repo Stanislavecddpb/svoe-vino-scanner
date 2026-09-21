@@ -20,5 +20,8 @@ export const appConfig = {
   get mlTimeoutMs() {
     return Number(process.env.ML_TIMEOUT_MS ?? 8000)
   },
+  get catalogImagesDir() {
+    return process.env.CATALOG_IMAGES_DIR || '../data/catalog/images'
+  },
   maxUploadBytes: 15 * 1024 * 1024,
 }
