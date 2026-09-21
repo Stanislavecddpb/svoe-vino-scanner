@@ -51,6 +51,7 @@ from wine_ml.twins import TWIN_THRESHOLD, twin_groups
 from wine_ml.views import LABEL_WEIGHT, VIEWS
 
 HARD_THRESHOLD = 0.9  # nearest *other* reference this similar = near-duplicate
+NOT_IN_CATALOG = "-"  # label for real photos of wines that are not in the catalog
 
 
 def load_queries(args, wines_in_index: list[str]) -> list[tuple[str, callable]]:
@@ -203,6 +204,7 @@ def main() -> None:
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--batch", type=int, default=16)
     ap.add_argument("--margin", type=float, default=0.03, help="confidence margin threshold")
+    ap.add_argument("--not-found", type=float, default=0.72, help="best visual score below this = 'not in catalog' (web NOT_FOUND_SCORE)")
     ap.add_argument("--labels", type=Path)
     ap.add_argument("--images-dir", type=Path, default=Path("."))
     ap.add_argument("--tag", default="", help="suffix for report file names")
@@ -228,7 +230,10 @@ def main() -> None:
 
     queries = load_queries(args, full_slugs)
     wine_set = set(full_slugs)
-    queries = [(s, f) for s, f in queries if s in wine_set]
+    unknown = sorted({s for s, _ in queries if s not in wine_set and s != NOT_IN_CATALOG})
+    if unknown:  # typo in labels, or a wine excluded from the index (ambiguous photo mapping)
+        print(f"skipping {len(unknown)} labels not in the index: {unknown[:10]}")
+    queries = [(s, f) for s, f in queries if s in wine_set or s == NOT_IN_CATALOG]
     print(f"index: {len(wine_set)} wines x views {views}, label weight {args.label_weight}; "
           f"near-duplicates: {len(hard)}, twins: {len(twins)}; queries: {len(queries)}")
 
@@ -238,7 +243,7 @@ def main() -> None:
     ocr = ocr_queries(args, queries) if args.ocr else None
 
     if args.sweep:
-        clean_idx = [i for i, (s, _) in enumerate(queries) if s not in twins]
+        clean_idx = [i for i, (s, _) in enumerate(queries) if s not in twins and s != NOT_IN_CATALOG]
         print("alpha  beta  | top1   top5   | near-dup top1")
         for alpha in (0.0, 0.02, 0.05, 0.1, 0.15, 0.2, 0.3):
             for beta in (0.0, 0.01, 0.02, 0.05):
@@ -249,7 +254,19 @@ def main() -> None:
         return
 
     rows = rank_rows(queries, scores, full_slugs, catalog, ocr, args.rerank_k, args.alpha, args.beta)
+    for r in rows:  # same rule as the web: "not in catalog" by the best visual score
+        r["not_found"] = r["score1"] < args.not_found
+    outside = [r for r in rows if r["slug"] == NOT_IN_CATALOG]
+    rows = [r for r in rows if r["slug"] != NOT_IN_CATALOG]
     clean = [r for r in rows if r["slug"] not in twins]
+    answer_ok = [r["rank"] == 1 and not r["not_found"] for r in clean]
+    service = {  # what the user actually sees: the right card, or an honest "not in catalog"
+        "in_catalog_n": len(clean),
+        "in_catalog_correct_card": round(float(np.mean(answer_ok)), 4) if clean else None,
+        "in_catalog_false_not_found": round(float(np.mean([r["not_found"] for r in clean])), 4) if clean else None,
+        "outside_n": len(outside),
+        "outside_not_found": round(float(np.mean([r["not_found"] for r in outside])), 4) if outside else None,
+    }
     metrics = {
         "all_without_twins": summarize(clean, args.margin),
         "near_duplicates": summarize([r for r in clean if r["slug"] in hard], args.margin),
@@ -262,7 +279,9 @@ def main() -> None:
         "model": args.model, "views": views, "mode": mode,
         "index_wines": len(wine_set), "near_duplicate_refs": len(hard), "twin_refs": len(twins),
         "margin_threshold": args.margin, "embed_ms_per_image": round(embed_ms, 1),
+        "not_found_threshold": args.not_found,
         "metrics": metrics,
+        "service": service,
         "errors_sample": [r for r in clean if r["rank"] != 1][:50],
     }
     args.out.mkdir(parents=True, exist_ok=True)
@@ -279,6 +298,13 @@ def main() -> None:
         if b["n"]:
             lines.append(f"| {name} | {b['n']} | {b['top1']:.1%} | {b['top5']:.1%} | {b['top10']:.1%} | "
                          f"{b['mean_margin_correct']} | {b['confident_share']:.1%} | {b['confident_top1']} |")
+    s = service
+    lines += ["", f"Service answer (not_found when best visual score < {args.not_found}):", ""]
+    if s["in_catalog_n"]:
+        lines.append(f"- wines in the catalog ({s['in_catalog_n']}): right card {s['in_catalog_correct_card']:.1%}, "
+                     f"wrongly \"not in catalog\" {s['in_catalog_false_not_found']:.1%}")
+    if s["outside_n"]:
+        lines.append(f"- wines not in the catalog ({s['outside_n']}): correctly \"not in catalog\" {s['outside_not_found']:.1%}")
     (args.out / f"eval-{tag}.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print("\n".join(lines))
 

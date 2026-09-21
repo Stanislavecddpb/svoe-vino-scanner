@@ -1,0 +1,52 @@
+{
+  "date": "2026-09-21T17:27:50",
+  "model": "google/siglip2-so400m-patch14-384",
+  "views": [
+    "full",
+    "label_mid",
+    "label_low"
+  ],
+  "mode": "labeled, OCR rerank top-10 a=0.1 b=0.05",
+  "index_wines": 1964,
+  "near_duplicate_refs": 962,
+  "twin_refs": 67,
+  "margin_threshold": 0.03,
+  "embed_ms_per_image": 366.3,
+  "not_found_threshold": 0.72,
+  "metrics": {
+    "all_without_twins": {
+      "n": 1,
+      "top1": 1.0,
+      "top5": 1.0,
+      "top10": 1.0,
+      "mean_margin_correct": 0.0236,
+      "mean_top1_score": 0.855,
+      "confident_share": 0.0,
+      "confident_top1": null
+    },
+    "near_duplicates": {
+      "n": 1,
+      "top1": 1.0,
+      "top5": 1.0,
+      "top10": 1.0,
+      "mean_margin_correct": 0.0236,
+      "mean_top1_score": 0.855,
+      "confident_share": 0.0,
+      "confident_top1": null
+    },
+    "distinct": {
+      "n": 0
+    },
+    "twins": {
+      "n": 0
+    }
+  },
+  "service": {
+    "in_catalog_n": 1,
+    "in_catalog_correct_card": 1.0,
+    "in_catalog_false_not_found": 0.0,
+    "outside_n": 2,
+    "outside_not_found": 1.0
+  },
+  "errors_sample": []
+}

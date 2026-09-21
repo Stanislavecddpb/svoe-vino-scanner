@@ -122,8 +122,9 @@ $env:OCR_PROVIDER = "yandex"; $env:YC_OCR_API_KEY = "<ключ>"; $env:YC_FOLDER
 ml\.venv\Scripts\python ml\scripts\evaluate.py --tag multiview
 # только вид full — сравнение с baseline на тех же запросах (эмбеддинги запросов кэшируются)
 ml\.venv\Scripts\python ml\scripts\evaluate.py --views full --tag baseline
-# реальные размеченные фото (TSV: image_path<TAB>slug)
-ml\.venv\Scripts\python ml\scripts\evaluate.py --labels labels.tsv --images-dir photos
+# реальные размеченные фото (TSV: image_path<TAB>slug, "-" = вина нет в каталоге) — протокол съёмки: eval/real/README.md
+ml\.venv\Scripts\python ml\scripts\photo_checklist.py        # чек-лист вин для съёмки (data/photo_kit/checklist.html)
+ml\.venv\Scripts\python ml\scripts\evaluate.py --labels eval\real\labels.tsv --images-dir eval\real\photos --ocr --tag real
 # глазами: каждое фото + Top-5 эталонов (нужен запущенный сервис)
 ml\.venv\Scripts\python ml\scripts\contact_sheet.py --dir eval\queries
 ```

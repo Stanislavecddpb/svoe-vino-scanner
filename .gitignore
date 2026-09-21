@@ -15,3 +15,6 @@ reports/*.log
 # Claude Code personal settings
 .claude/settings.local.json
 reports/cache/
+
+# real test photos (personal, large)
+eval/real/photos/
