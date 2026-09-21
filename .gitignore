@@ -10,3 +10,4 @@ __pycache__/
 reports/*.jpg
 .pytest_cache/
 *.egg-info/
+reports/*.log
