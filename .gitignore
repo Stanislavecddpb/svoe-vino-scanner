@@ -1,0 +1,11 @@
+data/
+*.zip
+*.pdf
+node_modules/
+.nuxt/
+.output/
+__pycache__/
+.venv/
+.env
+reports/*.jpg
+.pytest_cache/
