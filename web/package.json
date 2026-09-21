@@ -1,0 +1,22 @@
+{
+  "name": "wine-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev --port 8080",
+    "build": "nuxt build",
+    "start": "node .output/server/index.mjs",
+    "postinstall": "nuxt prepare",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "nuxt": "^3.21.11",
+    "pg": "^8.23.0"
+  },
+  "devDependencies": {
+    "@nuxt/test-utils": "^4.3.2",
+    "@types/pg": "^8.23.1",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.1"
+  }
+}
