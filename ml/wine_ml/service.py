@@ -65,8 +65,10 @@ def create_app(embedder_factory: Callable, ocr_factory: Callable | None = None) 
     @app.get("/health")
     def health() -> dict:
         e = get_embedder()
+        from wine_ml.config import OCR_PROVIDER
+
         return {"status": "ok", "model": e.model_name, "device": e.device, "dim": e.dim,
-                "ocr": get_ocr is not None}
+                "ocr": OCR_PROVIDER if get_ocr else None}
 
     @app.post("/embed")
     async def embed(image: UploadFile = File(...)) -> dict:
@@ -97,10 +99,9 @@ def _default_embedder():
 
 
 def _default_ocr():
-    from wine_ml.config import resolve_device
-    from wine_ml.ocr import OcrEngine
+    from wine_ml.config import make_ocr_engine
 
-    return OcrEngine(resolve_device())
+    return make_ocr_engine()
 
 
 def _build_app() -> FastAPI:

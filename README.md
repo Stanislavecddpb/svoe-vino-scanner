@@ -84,6 +84,23 @@ docker compose -f docker-compose.yml -f docker-compose.gpu.yml --profile full up
 | `OCR_ENABLED` | `1` | web, ml | OCR-переранжирование Top-K по тексту этикетки (`0` — только картинка) |
 | `RERANK_K` | `10` | web | сколько визуальных кандидатов переранжировать |
 | `OCR_ALPHA` / `OCR_BETA` | `0.1` / `0.05` | ml | final = visual + α·совпадение текста − β·противоречия (цвет, сахар, год) |
+| `OCR_PROVIDER` | `easyocr` | ml | `easyocr` (локально) или `yandex` (Yandex Vision OCR, облако) |
+| `YC_OCR_API_KEY`, `YC_FOLDER_ID` | — | ml | ключ и каталог Yandex Cloud для `OCR_PROVIDER=yandex` |
+
+### Yandex Vision OCR вместо EasyOCR
+
+1. В [консоли Yandex Cloud](https://console.yandex.cloud) создайте (или выберите) каталог — его ID нужен как `YC_FOLDER_ID`.
+2. Создайте сервисный аккаунт с ролью `ai.vision.user`, для него — **API-ключ**.
+3. Задайте переменные и перезапустите ml-сервис:
+
+```powershell
+$env:OCR_PROVIDER = "yandex"; $env:YC_OCR_API_KEY = "<ключ>"; $env:YC_FOLDER_ID = "<id каталога>"
+.\scripts\dev.ps1
+```
+
+`GET http://127.0.0.1:8001/health` покажет `"ocr": "yandex"`. Ключ не храните в репозитории (`.env` в `.gitignore`).
+Если облако недоступно, сервис не падает — отвечает только по картинке (в логе `[yandex-ocr] request failed`).
+Сравнить движки на синтетике: `OCR_PROVIDER=yandex evaluate.py --limit 300 --hires --ocr` (кэш OCR хранится отдельно для каждого провайдера). Сервис платный (тарифицируется за запрос).
 | `ML_TIMEOUT_MS` | `8000` | web | таймаут запроса к ml |
 | `CATALOG_IMAGES_DIR` | `../data/catalog/images` | web | фото каталога |
 | `HF_HUB_OFFLINE` | — | ml | `1` — не ходить в сеть за моделью (после первой загрузки) |

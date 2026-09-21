@@ -1,0 +1,759 @@
+{
+  "date": "2026-09-21T15:44:11",
+  "model": "google/siglip2-so400m-patch14-384",
+  "views": [
+    "full",
+    "label_mid",
+    "label_low"
+  ],
+  "mode": "synthetic x2 hires, OCR rerank top-10 a=0.1 b=0.05",
+  "index_wines": 1964,
+  "near_duplicate_refs": 962,
+  "twin_refs": 67,
+  "margin_threshold": 0.03,
+  "embed_ms_per_image": 98.6,
+  "metrics": {
+    "all_without_twins": {
+      "n": 588,
+      "top1": 0.7058,
+      "top5": 0.898,
+      "top10": 0.9252,
+      "mean_margin_correct": 0.0624,
+      "mean_top1_score": 0.7986,
+      "confident_share": 0.4915,
+      "confident_top1": 0.9689
+    },
+    "near_duplicates": {
+      "n": 270,
+      "top1": 0.5926,
+      "top5": 0.8963,
+      "top10": 0.9259,
+      "mean_margin_correct": 0.0381,
+      "mean_top1_score": 0.8055,
+      "confident_share": 0.2926,
+      "confident_top1": 0.9747
+    },
+    "distinct": {
+      "n": 318,
+      "top1": 0.8019,
+      "top5": 0.8994,
+      "top10": 0.9245,
+      "mean_margin_correct": 0.0776,
+      "mean_top1_score": 0.7928,
+      "confident_share": 0.6604,
+      "confident_top1": 0.9667
+    },
+    "twins": {
+      "n": 12,
+      "top1": 0.25,
+      "top5": 0.8333,
+      "top10": 0.9167,
+      "mean_margin_correct": 0.0099,
+      "mean_top1_score": 0.7713,
+      "confident_share": 0.0,
+      "confident_top1": null
+    }
+  },
+  "errors_sample": [
+    {
+      "slug": "belbek-pino-nuar-rezerv-krasnoe-suhoe-135",
+      "rank": 2,
+      "pred": "belbek-belbek-fiolent-muskat-beloe-polusladkoe-125",
+      "score1": 0.7562907338142395,
+      "margin": 0.0024999999999999467,
+      "top5": [
+        "belbek-belbek-fiolent-muskat-beloe-polusladkoe-125",
+        "belbek-pino-nuar-rezerv-krasnoe-suhoe-135",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "belbek-belbek-kaberne-fran-krasnoe-suhoe-13",
+        "oxana-istratova-wine-saperavi-2023-krasnoe-suhoe-13"
+      ]
+    },
+    {
+      "slug": "belbek-pino-nuar-rezerv-krasnoe-suhoe-135",
+      "rank": 4,
+      "pred": "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+      "score1": 0.8053175210952759,
+      "margin": 0.0232,
+      "top5": [
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "belbek-belbek-kaberne-fran-krasnoe-suhoe-13",
+        "belbek-pino-nuar-rezerv-krasnoe-suhoe-135",
+        "radiowine-kaberne-fran-krasnoe-suhoe-14"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-victor-dravigny-brut-shardone-beloe-bryut-12",
+      "rank": 4,
+      "pred": "inkermanskiy-zmv-inkerman-bryut-shardone-beloe-135",
+      "score1": 0.7099148035049438,
+      "margin": 0.019199999999999995,
+      "top5": [
+        "inkermanskiy-zmv-inkerman-bryut-shardone-beloe-135",
+        "abrau-dyurso-victor-dravigny-koshernoe-bryut-shardone-beloe-125",
+        "abrau-dyurso-imperial-kyuve-pino-nuar-rozovoe-bryut-125",
+        "abrau-dyurso-victor-dravigny-brut-shardone-beloe-bryut-12",
+        "inkermanskiy-zmv-inkerman-bryut-rkatsiteli-beloe-12"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-victor-dravigny-brut-shardone-beloe-bryut-12",
+      "rank": 24,
+      "pred": "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+      "score1": 0.8071067333221436,
+      "margin": 0.0016000000000000458,
+      "top5": [
+        "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut",
+        "abrau-dyurso-imperatorskoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-polusladkoe"
+      ]
+    },
+    {
+      "slug": "esse-rkatsiteli-beloe-suhoe-125",
+      "rank": 15,
+      "pred": "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+      "score1": 0.7863461971282959,
+      "margin": 0.0038000000000000256,
+      "top5": [
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "chteau-le-grand-vostock-grand-karsov-shardone-beloe-suhoe-14",
+        "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+        "vibes-pinot-grigio-2021",
+        "belmas-winery-risling-beloe-suhoe-135"
+      ]
+    },
+    {
+      "slug": "domaine-lipko-white-blend-tsitronnyy-magaracha-beloe-suhoe-115",
+      "rank": 2,
+      "pred": "domaine-lipko-white-blend-muskat-beloe-polusuhoe-12",
+      "score1": 0.8941669464111328,
+      "margin": 0.005700000000000038,
+      "top5": [
+        "domaine-lipko-white-blend-muskat-beloe-polusuhoe-12",
+        "domaine-lipko-white-blend-tsitronnyy-magaracha-beloe-suhoe-115",
+        "domaine-lipko-white-blend-lipko-muskat-belyy-beloe-polusuhoe-115",
+        "domaine-lipko-sovinon-blan-beloe-suhoe-118",
+        "domaine-lipko-sauvignon-blanc-domaine-lipko-sovinon-blan-beloe-suhoe-118"
+      ]
+    },
+    {
+      "slug": "domaine-lipko-white-blend-tsitronnyy-magaracha-beloe-suhoe-115",
+      "rank": 2,
+      "pred": "domaine-lipko-white-blend-lipko-muskat-belyy-beloe-polusuhoe-115",
+      "score1": 0.8300877809524536,
+      "margin": 0.0031000000000001027,
+      "top5": [
+        "domaine-lipko-white-blend-lipko-muskat-belyy-beloe-polusuhoe-115",
+        "domaine-lipko-white-blend-tsitronnyy-magaracha-beloe-suhoe-115",
+        "domaine-lipko-white-blend-muskat-beloe-polusuhoe-12",
+        "domaine-lipko-risling-beloe-polusuhoe-124",
+        "domaine-lipko-sovinon-blan-beloe-suhoe-118"
+      ]
+    },
+    {
+      "slug": "derbent-vino-graf-vorontsov-beloe-polusladkoe-sovinon-blan-105-125",
+      "rank": 9,
+      "pred": "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+      "score1": 0.7803770303726196,
+      "margin": 0.008199999999999985,
+      "top5": [
+        "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+        "derbent-vino-kavkazian-merlo-krasnoe-polusladkoe-105-125",
+        "chteau-le-grand-vostock-grand-karsov-shardone-beloe-suhoe-14",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14"
+      ]
+    },
+    {
+      "slug": "belbek-belbek-pino-nuar-krasnoe-suhoe-13",
+      "rank": 13,
+      "pred": "belbek-belbek-fiolent-muskat-beloe-polusladkoe-125",
+      "score1": 0.7684400677680969,
+      "margin": 9.999999999998899e-05,
+      "top5": [
+        "belbek-belbek-fiolent-muskat-beloe-polusladkoe-125",
+        "belbek-belbek-kaberne-fran-krasnoe-suhoe-13",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "oxana-istratova-wine-saperavi-2023-krasnoe-suhoe-13",
+        "belbek-belbek-muskat-beloe-suhoe-128"
+      ]
+    },
+    {
+      "slug": "belbek-belbek-pino-nuar-krasnoe-suhoe-13",
+      "rank": 23,
+      "pred": "belbek-belbek-fiolent-muskat-beloe-polusladkoe-125",
+      "score1": 0.7404266595840454,
+      "margin": 0.005499999999999949,
+      "top5": [
+        "belbek-belbek-fiolent-muskat-beloe-polusladkoe-125",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "oxana-istratova-wine-vione-2024-oranzhevoe-suhoe-13",
+        "oxana-istratova-wine-vione-2023-oranzhevoe-suhoe-119",
+        "belbek-belbek-kaberne-fran-krasnoe-suhoe-13"
+      ]
+    },
+    {
+      "slug": "shato-pino-exclusive-pino-nuar-merlo-krasnoe-suhoe-135",
+      "rank": 8,
+      "pred": "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+      "score1": 0.7616207599639893,
+      "margin": 0.01550000000000007,
+      "top5": [
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "shato-pino-pino-nuar-krasnoe-suhoe-135",
+        "usadba-divnomorskoe-pinot-noir-pino-nuar-krasnoe-suhoe-12",
+        "shato-pino-blan-de-blan-shardone-beloe-ekstra-bryut-12",
+        "shato-pino-grand-reserve-pinot-noir-pino-nuar-krasnoe-suhoe-135"
+      ]
+    },
+    {
+      "slug": "kuban-vino-shato-tamane-rezerv-premer-ruzh-kaberne-sovinon-krasnoe-suhoe-13",
+      "rank": 5,
+      "pred": "fanagoriya-tochka-saperavi-krasnoe-suhoe-14",
+      "score1": 0.7299578189849854,
+      "margin": 0.007699999999999929,
+      "top5": [
+        "fanagoriya-tochka-saperavi-krasnoe-suhoe-14",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "rozovoe-polusladkoe-2",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "kuban-vino-shato-tamane-rezerv-premer-ruzh-kaberne-sovinon-krasnoe-suhoe-13"
+      ]
+    },
+    {
+      "slug": "derbent-vino-endemy-kaberne-fran-krasnoe-suhoe-13",
+      "rank": 5,
+      "pred": "derbent-vino-endemy-kaberne-sovinon-rozovoe-bryut-105-125",
+      "score1": 0.7470450401306152,
+      "margin": 0.015199999999999991,
+      "top5": [
+        "derbent-vino-endemy-kaberne-sovinon-rozovoe-bryut-105-125",
+        "derbent-vino-endemy-merlo-krasnoe-suhoe-13",
+        "derbent-vino-endemy-saperavi-krasnoe-suhoe-13",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "derbent-vino-endemy-kaberne-fran-krasnoe-suhoe-13"
+      ]
+    },
+    {
+      "slug": "novyj-svet-zolotoj-risling",
+      "rank": 4,
+      "pred": "novyy-svet-dom-shampanskih-vin-igristoe-vino-vyderzhannoe-polusladkoe-rozovoe-novyy-svet-pino-fran-135",
+      "score1": 0.7420501112937927,
+      "margin": 0.011399999999999966,
+      "top5": [
+        "novyy-svet-dom-shampanskih-vin-igristoe-vino-vyderzhannoe-polusladkoe-rozovoe-novyy-svet-pino-fran-135",
+        "novyy-svet-dom-shampanskih-vin-igristoe-vino-vyderzhannoe-bryut-krasnoe-novyy-svet-kaberne-sovinon-135",
+        "novyy-svet-dom-shampanskih-vin-rossiyskoe-shampanskoe-vyderzhannoe-ekstra-bryut-beloe-novyy-svet-kokur-11",
+        "novyj-svet-zolotoj-risling",
+        "novyy-svet-dom-shampanskih-vin-igristoe-vino-vyderzhannoe-bryut-rozovoe-novyy-svet-pino-fran-135"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-victor-dravigny-koshernoe-bryut-shardone-beloe-125",
+      "rank": 28,
+      "pred": "rozovoe-polusladkoe-2",
+      "score1": 0.7096235752105713,
+      "margin": 0.0023999999999999577,
+      "top5": [
+        "rozovoe-polusladkoe-2",
+        "inkermanskiy-zmv-inkerman-bryut-shardone-beloe-135",
+        "abrau-dyurso-imperial-kyuve-pino-nuar-rozovoe-bryut-125",
+        "inkermanskiy-zmv-inkerman-bryut-rkatsiteli-beloe-12",
+        "esse-rose-cuvee-prestige-pino-nuar-rozovoe-bryut-13"
+      ]
+    },
+    {
+      "slug": "denisov-winery-petnat-risling-beloe-ekstra-bryut-10",
+      "rank": 2,
+      "pred": "denisov-winery-petnat-tsitron-risling-tsitronnyy-magaracha-beloe-ekstra-bryut-102",
+      "score1": 0.7890853881835938,
+      "margin": 0.008299999999999974,
+      "top5": [
+        "denisov-winery-petnat-tsitron-risling-tsitronnyy-magaracha-beloe-ekstra-bryut-102",
+        "denisov-winery-petnat-risling-beloe-ekstra-bryut-10",
+        "denisov-winery-petnat-rkatsiteli-beloe-ekstra-bryut-107",
+        "denisov-winery-petnat-saperavi-severnyy-rozovoe-ekstra-bryut-105",
+        "muskat-ottonel-gusev"
+      ]
+    },
+    {
+      "slug": "usadba-mezyb-shishka-pino-nuar-rozovoe-suhoe-115",
+      "rank": 2,
+      "pred": "usadba-mezyb-shishka-kupazh-5-kaberne-sovinon-rozovoe-suhoe-133",
+      "score1": 0.7790384292602539,
+      "margin": 0.010000000000000009,
+      "top5": [
+        "usadba-mezyb-shishka-kupazh-5-kaberne-sovinon-rozovoe-suhoe-133",
+        "usadba-mezyb-shishka-pino-nuar-rozovoe-suhoe-115",
+        "usadba-mezyb-shishka-merlo-vione-rozovoe-suhoe-125",
+        "usadba-mezyb-shishka-oranzh-shardone-beloe-suhoe-127",
+        "usadba-mezyb-shishka-sovinon-blan-beloe-suhoe-12"
+      ]
+    },
+    {
+      "slug": "derbent-vino-endemy-pino-nuar-rozovoe-bryut-105-125",
+      "rank": 42,
+      "pred": "vinodelnya-vedernikov-vinodelnya-vedernikov-tsimlyanskiy-chernyy-sibirkovyy-ekstra-bryut-beloe-13",
+      "score1": 0.7426292896270752,
+      "margin": 0.008900000000000019,
+      "top5": [
+        "vinodelnya-vedernikov-vinodelnya-vedernikov-tsimlyanskiy-chernyy-sibirkovyy-ekstra-bryut-beloe-13",
+        "agrolayn-vexillum-blanc-de-noirs-pino-nuar-beloe-bryut-12",
+        "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+        "agrolayn-vexillum-blanc-de-blancs-shardone-beloe-bryut-115",
+        "vinodelnya-vedernikov-vedernikov-tsimlyanskiy-chyornyy-bryut-tsimlyanskiy-chernyy-beloe-12"
+      ]
+    },
+    {
+      "slug": "loco-cimbali-pino-mene-krasnoe-suhoe-115",
+      "rank": 27,
+      "pred": "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+      "score1": 0.7162923812866211,
+      "margin": 0.007099999999999995,
+      "top5": [
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "stn-winery-bratstvo-kochergi-pino-nuar-krasnoe-suhoe-12",
+        "vaynkraft-kaberne-sovinon-krasnoe-suhoe-14",
+        "bogovich-wine-vineyard-pino-nuar-2-krasnoe-suhoe-12"
+      ]
+    },
+    {
+      "slug": "shato-pino-blan-de-blan-shardone-beloe-ekstra-bryut-12",
+      "rank": 90,
+      "pred": "fanagoriya-rs-noir-saperavi-krasnoe-polusladkoe-125",
+      "score1": 0.6018494963645935,
+      "margin": 0.014000000000000012,
+      "top5": [
+        "fanagoriya-rs-noir-saperavi-krasnoe-polusladkoe-125",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "fanagoriya-tochka-saperavi-krasnoe-suhoe-14",
+        "rozovoe-polusladkoe-2",
+        "fanagoriya-blanc-de-noir-mene-extra-brut-2019-pino-nuar-beloe-ekstra-bryut-12"
+      ]
+    },
+    {
+      "slug": "vinodelnya-krinitsa-ester-muskat-belyy-beloe-suhoe-12",
+      "rank": 2,
+      "pred": "vinodelnya-krinitsa-azyur-risling-beloe-suhoe-127",
+      "score1": 0.7704805135726929,
+      "margin": 0.022399999999999975,
+      "top5": [
+        "vinodelnya-krinitsa-azyur-risling-beloe-suhoe-127",
+        "vinodelnya-krinitsa-ester-muskat-belyy-beloe-suhoe-12",
+        "vinodelnya-krinitsa-vione-beloe-suhoe-133",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "beloe-suhoe"
+      ]
+    },
+    {
+      "slug": "vinodelnya-raevskoe-parfyum-de-terruar-risling-beloe-suhoe-12",
+      "rank": 3,
+      "pred": "vinodelnya-raevskoe-parfyum-de-terruar-ruzh-tempranilo-krasnoe-suhoe-13",
+      "score1": 0.7566238641738892,
+      "margin": 0.011700000000000044,
+      "top5": [
+        "vinodelnya-raevskoe-parfyum-de-terruar-ruzh-tempranilo-krasnoe-suhoe-13",
+        "vinodelnya-raevskoe-parfyum-de-terruar-roze-tempranilo-rozovoe-suhoe-116",
+        "vinodelnya-raevskoe-parfyum-de-terruar-risling-beloe-suhoe-12",
+        "vinodelnya-raevskoe-parfyum-de-terruar-blansh-vione-beloe-suhoe-12",
+        "vinodelnya-raevskoe-parfyum-de-terruar-sovinon-blan-beloe-suhoe-121"
+      ]
+    },
+    {
+      "slug": "vermentino-viognier-2022",
+      "rank": 18,
+      "pred": "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+      "score1": 0.8061740398406982,
+      "margin": 0.0041999999999999815,
+      "top5": [
+        "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "vibes-vermentino-viognier-barrel-fermented-vermentino-beloe-suhoe-115",
+        "esse-pino-gri-beloe-suhoe-135",
+        "vibes-pinot-grigio-2021"
+      ]
+    },
+    {
+      "slug": "kuban-vino-shato-tamane-rezerv-red-blend-kaberne-sovinon-krasnoe-suhoe-125",
+      "rank": 2,
+      "pred": "kuban-vino-shato-tamane-rezerv-kaberne-limited-edishn-2022-kaberne-sovinon-krasnoe-suhoe-14",
+      "score1": 0.8213983774185181,
+      "margin": 0.0011999999999999789,
+      "top5": [
+        "kuban-vino-shato-tamane-rezerv-kaberne-limited-edishn-2022-kaberne-sovinon-krasnoe-suhoe-14",
+        "kuban-vino-shato-tamane-rezerv-red-blend-kaberne-sovinon-krasnoe-suhoe-125",
+        "kuban-vino-shato-tamane-rezerv-merlo-limited-edishn-2018-krasnoe-suhoe-125",
+        "kuban-vino-shato-tamane-rezerv-kollekshn-saperavi-2015-krasnoe-suhoe-13",
+        "kuban-vino-shato-tamane-rezerv-kaberne-limited-edishn-2015-kaberne-sovinon-krasnoe-suhoe-13"
+      ]
+    },
+    {
+      "slug": "kuban-vino-shato-tamane-rezerv-red-blend-kaberne-sovinon-krasnoe-suhoe-125",
+      "rank": 64,
+      "pred": "vinodelnya-vedernikov-vedernikov-gubernatorskoe-rezerv-kaberne-sovinon-krasnoe-suhoe-14",
+      "score1": 0.7294632196426392,
+      "margin": 0.007800000000000029,
+      "top5": [
+        "vinodelnya-vedernikov-vedernikov-gubernatorskoe-rezerv-kaberne-sovinon-krasnoe-suhoe-14",
+        "vinodelnya-vedernikov-vedernikov-kaberne-sovinon-krasnoe-suhoe-145",
+        "vinodelnya-vedernikov-vedernikov-krasnostop-zolotovskiy-krasnoe-suhoe-145",
+        "vinodelnya-vedernikov-tsimlyanskiy-chernyy-rezerv-krasnoe-suhoe-145",
+        "vinodelnya-uzunov-shardone-rezerv-beloe-suhoe-135"
+      ]
+    },
+    {
+      "slug": "vibes-riesling-silvaner-risling-beloe-suhoe-115",
+      "rank": 5,
+      "pred": "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+      "score1": 0.810141921043396,
+      "margin": 0.0023000000000000798,
+      "top5": [
+        "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+        "vibes-silvaner-2022",
+        "vibes-silvaner-silvaner-beloe-suhoe-125",
+        "vibes-riesling-silvaner-2022",
+        "vibes-riesling-silvaner-risling-beloe-suhoe-115"
+      ]
+    },
+    {
+      "slug": "vibes-riesling-silvaner-risling-beloe-suhoe-115",
+      "rank": 209,
+      "pred": "rozovoe-polusladkoe-2",
+      "score1": 0.6377811431884766,
+      "margin": 0.02650000000000008,
+      "top5": [
+        "rozovoe-polusladkoe-2",
+        "inkermanskiy-zmv-inkerman-bryut-shardone-beloe-135",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+        "zolotaya-balka-pink-sira-rozovoe-suhoe-13"
+      ]
+    },
+    {
+      "slug": "inkermanskiy-zmv-inkerman-rozovoe-polusladkoe-rkatsiteli-12",
+      "rank": 2,
+      "pred": "inkermanskiy-zmv-inkerman-polusladkoe-roze-aligote-rozovoe-135",
+      "score1": 0.8476690053939819,
+      "margin": 0.008599999999999941,
+      "top5": [
+        "inkermanskiy-zmv-inkerman-polusladkoe-roze-aligote-rozovoe-135",
+        "inkermanskiy-zmv-inkerman-rozovoe-polusladkoe-rkatsiteli-12",
+        "inkermanskiy-zmv-inkerman-bryut-shardone-beloe-135",
+        "inkermanskiy-zmv-inkerman-bryut-rkatsiteli-beloe-12",
+        "inkermanskiy-zmv-inkerman-polusladkoe-rkatsiteli-beloe-13"
+      ]
+    },
+    {
+      "slug": "bakla-vines-sira-krasnoe-suhoe-135",
+      "rank": 20,
+      "pred": "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+      "score1": 0.7951936721801758,
+      "margin": 0.024800000000000044,
+      "top5": [
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "stn-winery-bratstvo-kochergi-pino-nuar-krasnoe-suhoe-12",
+        "nikolaev-i-synovya-flamingo-malbek-rozovoe-suhoe-125",
+        "radiowine-kaberne-fran-krasnoe-suhoe-14"
+      ]
+    },
+    {
+      "slug": "esse-kaberne-otbornoe-kaberne-sovinon-krasnoe-suhoe-12",
+      "rank": 2,
+      "pred": "esse-sovinon-blan-fyume-beloe-suhoe-128",
+      "score1": 0.8091216683387756,
+      "margin": 0.009199999999999986,
+      "top5": [
+        "esse-sovinon-blan-fyume-beloe-suhoe-128",
+        "esse-kaberne-otbornoe-kaberne-sovinon-krasnoe-suhoe-12",
+        "esse-kaberne-sovinon-krasnoe-suhoe-14",
+        "esse-roze-kaberne-sovinon-rozovoe-suhoe-135",
+        "esse-gevyurtstraminer-beloe-suhoe-12"
+      ]
+    },
+    {
+      "slug": "esse-kaberne-otbornoe-kaberne-sovinon-krasnoe-suhoe-12",
+      "rank": 15,
+      "pred": "esse-sovinon-blan-fyume-beloe-suhoe-128",
+      "score1": 0.8081735372543335,
+      "margin": 0.0020000000000000018,
+      "top5": [
+        "esse-sovinon-blan-fyume-beloe-suhoe-128",
+        "esse-merlo-krasnoe-suhoe-135",
+        "esse-esse-sira-krasnoe-suhoe-12",
+        "esse-kaberne-sovinon-krasnoe-suhoe-14",
+        "esse-kaberne-fran-krasnoe-suhoe-13"
+      ]
+    },
+    {
+      "slug": "vinodelnya-krinitsa-arena-sira-krasnoe-suhoe-13",
+      "rank": 91,
+      "pred": "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+      "score1": 0.7354720830917358,
+      "margin": 0.0046000000000000485,
+      "top5": [
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+        "radiowine-kaberne-fran-krasnoe-suhoe-14",
+        "fanagoriya-tochka-saperavi-krasnoe-suhoe-14"
+      ]
+    },
+    {
+      "slug": "inkermanskiy-zmv-inkerman-polusladkoe-rkatsiteli-beloe-13",
+      "rank": 3,
+      "pred": "inkermanskiy-zmv-inkerman-bryut-shardone-beloe-135",
+      "score1": 0.8487359285354614,
+      "margin": 0.008700000000000041,
+      "top5": [
+        "inkermanskiy-zmv-inkerman-bryut-shardone-beloe-135",
+        "inkermanskiy-zmv-inkerman-bryut-rkatsiteli-beloe-12",
+        "inkermanskiy-zmv-inkerman-polusladkoe-rkatsiteli-beloe-13",
+        "inkermanskiy-zmv-inkerman-polusladkoe-roze-aligote-rozovoe-135",
+        "inkermanskiy-zmv-inkerman-rozovoe-polusladkoe-rkatsiteli-12"
+      ]
+    },
+    {
+      "slug": "inkermanskiy-zmv-inkerman-polusladkoe-rkatsiteli-beloe-13",
+      "rank": 8,
+      "pred": "rozovoe-polusladkoe-2",
+      "score1": 0.7690229415893555,
+      "margin": 0.007900000000000018,
+      "top5": [
+        "rozovoe-polusladkoe-2",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "inkermanskiy-zmv-inkerman-bryut-shardone-beloe-135",
+        "inkermanskiy-zmv-inkerman-bryut-rkatsiteli-beloe-12",
+        "usadba-perovskih-blanc-de-blancs-shardone-beloe-ekstra-bryut-11"
+      ]
+    },
+    {
+      "slug": "fanagoriya-blanc-de-noirs-mene-pino-mene-beloe-ekstra-bryut-12",
+      "rank": 2,
+      "pred": "fanagoriya-blanc-de-blancs-shardone-beloe-bryut-12",
+      "score1": 0.8430285453796387,
+      "margin": 0.03079999999999994,
+      "top5": [
+        "fanagoriya-blanc-de-blancs-shardone-beloe-bryut-12",
+        "fanagoriya-blanc-de-noirs-mene-pino-mene-beloe-ekstra-bryut-12",
+        "fanagoriya-primum-alveus-blanc-de-blancs-ekstra-bryut-2019-shardone-beloe-11-13",
+        "fanagoriya-primum-alveus-blanc-de-noirs-meunier-ekstra-bryut-2019-mene-beloe-11-13",
+        "fanagoriya-primum-alveus-blanc-de-blancs-2017-shardone-igristoe-bryut-beloe-12"
+      ]
+    },
+    {
+      "slug": "fanagoriya-blanc-de-noirs-mene-pino-mene-beloe-ekstra-bryut-12",
+      "rank": 5,
+      "pred": "fanagoriya-primum-alveus-blanc-de-noirs-meunier-ekstra-bryut-2019-mene-beloe-11-13",
+      "score1": 0.814200222492218,
+      "margin": 0.005199999999999982,
+      "top5": [
+        "fanagoriya-primum-alveus-blanc-de-noirs-meunier-ekstra-bryut-2019-mene-beloe-11-13",
+        "fanagoriya-primum-alveus-extra-brut-2016-shardone-beloe-bryut-12",
+        "fanagoriya-primum-alveus-extra-brut-2014-pino-nuar-beloe-bryut-12",
+        "fanagoriya-primum-alveus-blanc-de-blancs-ekstra-bryut-2019-shardone-beloe-11-13",
+        "fanagoriya-blanc-de-noirs-mene-pino-mene-beloe-ekstra-bryut-12"
+      ]
+    },
+    {
+      "slug": "vinodelnya-myshako-marselan-krasnoe-suhoe-143",
+      "rank": 6,
+      "pred": "fanagoriya-tochka-saperavi-krasnoe-suhoe-14",
+      "score1": 0.6875345706939697,
+      "margin": 0.007600000000000051,
+      "top5": [
+        "fanagoriya-tochka-saperavi-krasnoe-suhoe-14",
+        "domaine-lipko-pino-nuar-krasnoe-suhoe-12",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "rozovoe-polusladkoe-2",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14"
+      ]
+    },
+    {
+      "slug": "vinodelnya-myshako-zinfandel-mode-petnat-rozovoe-polusuhoe-12",
+      "rank": 193,
+      "pred": "dubinin-winery-roze-kaberne-fran-rozovoe-suhoe-13",
+      "score1": 0.6447658538818359,
+      "margin": 0.005300000000000082,
+      "top5": [
+        "dubinin-winery-roze-kaberne-fran-rozovoe-suhoe-13",
+        "inkermanskiy-zmv-inkerman-bryut-shardone-beloe-135",
+        "zolotaya-balka-pink-sira-rozovoe-suhoe-13",
+        "inkermanskiy-zmv-inkerman-polusladkoe-roze-aligote-rozovoe-135",
+        "evolution-pinot-noir"
+      ]
+    },
+    {
+      "slug": "usadba-divnomorskoe-maris-blanc-de-noirs-extra-brut-pino-nuar-beloe-ekstra-bryut-105",
+      "rank": 7,
+      "pred": "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+      "score1": 0.6684021949768066,
+      "margin": 0.0026000000000000467,
+      "top5": [
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+        "fanagoriya-tochka-saperavi-krasnoe-suhoe-14",
+        "rozovoe-polusladkoe-2"
+      ]
+    },
+    {
+      "slug": "andryus-yutsis-risling-beloe-suhoe-12",
+      "rank": 88,
+      "pred": "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+      "score1": 0.7879863977432251,
+      "margin": 0.015000000000000013,
+      "top5": [
+        "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "belmas-winery-risling-beloe-suhoe-135",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "evolution-pinot-noir"
+      ]
+    },
+    {
+      "slug": "aristov-anima-pinot-grigio-blush",
+      "rank": 3,
+      "pred": "kuban-vino-aristov-anima-pino-gridzhio-beloe-suhoe-12",
+      "score1": 0.850969672203064,
+      "margin": 0.01539999999999997,
+      "top5": [
+        "kuban-vino-aristov-anima-pino-gridzhio-beloe-suhoe-12",
+        "kuban-vino-aristov-anima-pino-gridzhio-blash-rozovoe-suhoe-125",
+        "aristov-anima-pinot-grigio-blush",
+        "aristov-anima-millesimato",
+        "kuban-vino-aristov-anima-pino-nero-sandzhoveze-pino-nuar-krasnoe-suhoe-125"
+      ]
+    },
+    {
+      "slug": "vinodelnya-myshako-shiraz-black-out-krasnoe-suhoe-152",
+      "rank": 2,
+      "pred": "vinodelnya-myshako-merlo-black-out-krasnoe-sladkoe-14",
+      "score1": 0.7349909543991089,
+      "margin": 0.00649999999999995,
+      "top5": [
+        "vinodelnya-myshako-merlo-black-out-krasnoe-sladkoe-14",
+        "vinodelnya-myshako-shiraz-black-out-krasnoe-suhoe-152",
+        "vinodelnya-myshako-kaberne-sovinon-black-out-krasnoe-polusuhoe-16",
+        "vinodelnya-myshako-risling-blanc-out-beloe-suhoe-145",
+        "fanagoriya-tochka-saperavi-krasnoe-suhoe-14"
+      ]
+    },
+    {
+      "slug": "vinodelnya-myshako-shiraz-black-out-krasnoe-suhoe-152",
+      "rank": 263,
+      "pred": "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+      "score1": 0.7479193210601807,
+      "margin": 0.0025000000000000577,
+      "top5": [
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "rozovoe-polusladkoe-2",
+        "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+        "fanagoriya-tochka-saperavi-krasnoe-suhoe-14"
+      ]
+    },
+    {
+      "slug": "belbek-belbek-meritazh-kaberne-sovinon-krasnoe-suhoe-135",
+      "rank": 5,
+      "pred": "radiowine-kaberne-fran-krasnoe-suhoe-14",
+      "score1": 0.8028240203857422,
+      "margin": 0.004899999999999904,
+      "top5": [
+        "radiowine-kaberne-fran-krasnoe-suhoe-14",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "stn-winery-syrah-sira-krasnoe-suhoe-13",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "belbek-belbek-meritazh-kaberne-sovinon-krasnoe-suhoe-135"
+      ]
+    },
+    {
+      "slug": "belbek-belbek-meritazh-kaberne-sovinon-krasnoe-suhoe-135",
+      "rank": 5,
+      "pred": "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+      "score1": 0.7852402329444885,
+      "margin": 0.03080000000000005,
+      "top5": [
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "radiowine-kaberne-fran-krasnoe-suhoe-14",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "belbek-belbek-kaberne-fran-krasnoe-suhoe-13",
+        "belbek-belbek-meritazh-kaberne-sovinon-krasnoe-suhoe-135"
+      ]
+    },
+    {
+      "slug": "imenie-sikory-gerts-kaberne-sovinon-krasnoe-suhoe-14",
+      "rank": 2,
+      "pred": "imenie-sikory-gerts-sikory-kaberne-sovinon-krasnoe-suhoe-14",
+      "score1": 0.7784991264343262,
+      "margin": 0.0028000000000000247,
+      "top5": [
+        "imenie-sikory-gerts-sikory-kaberne-sovinon-krasnoe-suhoe-14",
+        "imenie-sikory-gerts-kaberne-sovinon-krasnoe-suhoe-14",
+        "imenie-sikory-kaberne-sovinon-semeynyy-rezerv-krasnoe-suhoe-14",
+        "imenie-sikory-semeynoe-nasledie-kaberne-sovinon-krasnoe-suhoe-14",
+        "belbek-belbek-merlo-krasnoe-suhoe-129"
+      ]
+    },
+    {
+      "slug": "imenie-sikory-gerts-kaberne-sovinon-krasnoe-suhoe-14",
+      "rank": 2,
+      "pred": "imenie-sikory-gerts-sikory-kaberne-sovinon-krasnoe-suhoe-14",
+      "score1": 0.8264513611793518,
+      "margin": 0.006700000000000039,
+      "top5": [
+        "imenie-sikory-gerts-sikory-kaberne-sovinon-krasnoe-suhoe-14",
+        "imenie-sikory-gerts-kaberne-sovinon-krasnoe-suhoe-14",
+        "belbek-belbek-merlo-krasnoe-suhoe-129",
+        "imenie-sikory-kaberne-sovinon-semeynyy-rezerv-krasnoe-suhoe-14",
+        "imenie-sikory-merlo-semeynyy-rezerv-krasnoe-suhoe-14"
+      ]
+    },
+    {
+      "slug": "imenie-sikory-pino-nuar-sikory-krasnoe-suhoe-14",
+      "rank": 12,
+      "pred": "abrau-dyurso-pino-nuar-krasnoe-suhoe-12",
+      "score1": 0.6978850364685059,
+      "margin": 0.011099999999999999,
+      "top5": [
+        "abrau-dyurso-pino-nuar-krasnoe-suhoe-12",
+        "abrau-dyurso-abrau-dyurso-pino-nuar-krasnoe-suhoe-13",
+        "fanagoriya-tochka-saperavi-krasnoe-suhoe-14",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14"
+      ]
+    },
+    {
+      "slug": "imenie-sikory-pino-nuar-sikory-krasnoe-suhoe-14",
+      "rank": 63,
+      "pred": "abrau-dyurso-pino-nuar-krasnoe-suhoe-12",
+      "score1": 0.7362242937088013,
+      "margin": 0.0046000000000000485,
+      "top5": [
+        "abrau-dyurso-pino-nuar-krasnoe-suhoe-12",
+        "bogovich-wine-vineyard-klassika-pino-nuar-krasnoe-suhoe-125",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "rozovoe-polusladkoe-2"
+      ]
+    },
+    {
+      "slug": "grand-jete-blanc-de-noirs",
+      "rank": 2,
+      "pred": "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+      "score1": 0.7192440032958984,
+      "margin": 0.0011999999999999789,
+      "top5": [
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "grand-jete-blanc-de-noirs",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "zolotaya-balka-chernyy-prints-shardone-beloe-ekstra-bryut-12",
+        "usadba-perovskih-blanc-de-blancs-shardone-beloe-ekstra-bryut-11"
+      ]
+    }
+  ]
+}

@@ -27,6 +27,10 @@ services:
       MODEL_NAME: ${MODEL_NAME:-google/siglip2-so400m-patch14-384}
       DEVICE: ${DEVICE:-auto}
       DATABASE_URL: postgresql://wine:wine@db:5432/wine
+      OCR_ENABLED: ${OCR_ENABLED:-1}
+      OCR_PROVIDER: ${OCR_PROVIDER:-easyocr}
+      YC_OCR_API_KEY: ${YC_OCR_API_KEY:-}
+      YC_FOLDER_ID: ${YC_FOLDER_ID:-}
     ports:
       - "8001:8001"
     volumes:
@@ -44,6 +48,7 @@ services:
       CONFIDENCE_MARGIN: ${CONFIDENCE_MARGIN:-0.03}
       NOT_FOUND_SCORE: ${NOT_FOUND_SCORE:-0.72}
       LABEL_WEIGHT: ${LABEL_WEIGHT:-0.5}
+      OCR_ENABLED: ${OCR_ENABLED:-1}
       CATALOG_IMAGES_DIR: /data/catalog/images
     ports:
       - "8080:8080"

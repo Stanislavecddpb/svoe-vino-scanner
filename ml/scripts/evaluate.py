@@ -43,7 +43,7 @@ from PIL import Image
 from tqdm import tqdm
 
 from wine_ml.augment import field_like
-from wine_ml.config import DEVICE, MODEL_NAME, OCR_ALPHA, OCR_BETA
+from wine_ml.config import DEVICE, MODEL_NAME, OCR_ALPHA, OCR_BETA, OCR_PROVIDER, make_ocr_engine
 from wine_ml.db import connect, fetch_embeddings
 from wine_ml.preprocess import normalize_image
 from wine_ml.text_match import rerank
@@ -128,17 +128,14 @@ def ocr_queries(args, queries) -> list[list[dict]]:
     """OCR items per query (cached for synthetic mode); images are regenerated deterministically."""
     cache = None
     if not args.labels:
-        cache = args.out / "cache" / f"ocr-seed{args.seed}-n{args.n_aug}-limit{args.limit}{'-hires' if args.hires else ''}.json"
+        cache = args.out / "cache" / f"ocr-{OCR_PROVIDER}-seed{args.seed}-n{args.n_aug}-limit{args.limit}{'-hires' if args.hires else ''}.json"
         if cache.exists():
             z = json.loads(cache.read_text(encoding="utf-8"))
             if z["slugs"] == [s for s, _ in queries]:
                 print(f"OCR from cache: {cache}")
                 return z["ocr"]
 
-    from wine_ml.config import resolve_device
-    from wine_ml.ocr import OcrEngine
-
-    engine = OcrEngine(resolve_device(args.device))
+    engine = make_ocr_engine(args.device)
     t0 = time.perf_counter()
     out = [engine.read(load()) for _, load in tqdm(queries, unit="img", desc="ocr")]
     print(f"OCR: {1000 * (time.perf_counter() - t0) / max(len(queries), 1):.0f} ms/img")
