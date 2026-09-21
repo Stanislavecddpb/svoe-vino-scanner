@@ -58,6 +58,8 @@ describe('api (stub engine)', async () => {
     expect(typeof body.confident).toBe('boolean')
     expect(body.engine).toBe('stub')
     expect(typeof body.latency_ms).toBe('number')
+    expect(['confident', 'uncertain', 'not_found']).toContain(body.status)
+    expect(body.top5[0].image_url).toBe(`/v1/wines/${body.top5[0].slug}/image`)
   })
 
   it('health reports engine', async () => {

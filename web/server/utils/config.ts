@@ -17,6 +17,9 @@ export const appConfig = {
   get confidenceMargin() {
     return Number(process.env.CONFIDENCE_MARGIN ?? 0.03)
   },
+  get notFoundScore() {
+    return Number(process.env.NOT_FOUND_SCORE ?? 0.72)
+  },
   get mlTimeoutMs() {
     return Number(process.env.ML_TIMEOUT_MS ?? 8000)
   },

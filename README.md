@@ -10,7 +10,7 @@
 
 | Папка | Что |
 |---|---|
-| `web/` | Nuxt 3 (Nitro): публичный API на :8080, демо-страница |
+| `web/` | Nuxt 3 (Nitro): публичный API и mobile-first интерфейс (сканер + карточка вина) на :8080 |
 | `ml/` | Python: сервис эмбеддингов (FastAPI, :8001), скрипты каталога/индекса/оценки |
 | `db/init.sql` | схема Postgres + pgvector |
 | `eval/` | набор кейсодержателя: `participant_test.sh`, `queries.tsv`, 3 фото |
@@ -55,13 +55,19 @@ docker compose -f docker-compose.yml -f docker-compose.gpu.yml --profile full up
 | Метод | Путь | Ответ |
 |---|---|---|
 | `POST` | `/v1/eval/predict` (multipart `image`) | `{"slug": "..."}` — контракт скрипта кейсодержателя |
-| `POST` | `/v1/search` (multipart `image`) | `{top1, top5: [{slug, name, winery, score}], margin, confident, engine, model, latency_ms}` |
+| `POST` | `/v1/search` (multipart `image`) | `{top1, top5: [{slug, name, winery, score, image_url}], margin, confident, status, engine, model, latency_ms}` |
 | `GET` | `/v1/wines/:slug` | карточка: `slug, name, category, color, region, grapes, description, winery, image_url` |
-| `GET` | `/v1/images/:file` | фото из каталога |
+| `GET` | `/v1/wines/:slug/image` | фото из каталога |
+| `GET` | `/v1/wines/:slug/similar?limit=8` | похожие вина по визуальному сходству эталонов |
 | `GET` | `/health` | `{status, engine, model, db: {wines, indexed}, ml}` |
 
 Ошибки: `{"error": "..."}` — 400 (нет `image`, не картинка), 404, 413 (>15 МБ), 503 (ml/БД недоступны).
 `score` — косинусное сходство фото с эталоном; `margin` — отрыв Top-1 от Top-2; `confident` — `margin ≥ CONFIDENCE_MARGIN`.
+`status`: `confident` (одна карточка), `uncertain` (карточка + «Не то вино?» раскрыто), `not_found` (score₁ < `NOT_FOUND_SCORE` — «нет в каталоге» + похожие).
+
+## Интерфейс
+
+`/` — сканер (камера/галерея), `/wine/:slug` — карточка в стиле vino-svoe.ru: фото, характеристики, описание, «Не то вино?» (остальные кандидаты), «Похожие вина».
 
 ## Переменные окружения
 
@@ -73,6 +79,7 @@ docker compose -f docker-compose.yml -f docker-compose.gpu.yml --profile full up
 | `MODEL_NAME` | `google/siglip2-so400m-patch14-384` | web, ml | модель; web ищет только по векторам этой модели |
 | `DEVICE` | `auto` | ml | `auto` / `cuda` / `cpu` |
 | `CONFIDENCE_MARGIN` | `0.03` | web | порог отрыва для `confident` |
+| `NOT_FOUND_SCORE` | `0.72` | web | ниже этого score₁ — «нет в каталоге» |
 | `ML_TIMEOUT_MS` | `8000` | web | таймаут запроса к ml |
 | `CATALOG_IMAGES_DIR` | `../data/catalog/images` | web | фото каталога |
 | `HF_HUB_OFFLINE` | — | ml | `1` — не ходить в сеть за моделью (после первой загрузки) |

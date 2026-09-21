@@ -24,8 +24,8 @@ ml — FastAPI, :8001                                  Postgres 16 + pgvector
 | Нормализация фото | `ml/wine_ml/preprocess.py` | EXIF-поворот → RGB, прозрачность → белый → обрезка белых полей → уменьшение до 1024 → паддинг до квадрата. Одна функция для эталонов, запросов и оценки, чтобы векторы были сопоставимы. |
 | Извлечение признаков | `ml/wine_ml/embedder.py` | SigLIP 2 (`google/siglip2-so400m-patch14-384`, 1152-d), fp16 на GPU, L2-нормировка. |
 | Поиск по каталогу | `web/server/utils/engine/vector.ts` | косинусное расстояние `<=>` в pgvector, точный перебор (≈2k векторов, <5 мс), Top-5. |
-| Выдача карточки | `web/server/routes/v1/wines/[slug].get.ts`, `/v1/images/:file` | карточка вина из таблицы `wines` + фото каталога. |
-| Уверенность | `web/server/utils/search.ts` | `score` = косинусное сходство; `margin` = score₁ − score₂; `confident` = margin ≥ `CONFIDENCE_MARGIN`. |
+| Выдача карточки | `web/server/routes/v1/wines/[slug]/`, `web/pages/wine/[slug].vue` | карточка вина из таблицы `wines` + фото каталога. |
+| Уверенность | `web/server/utils/search.ts`, `status.ts` | `score` = косинусное сходство; `margin` = score₁ − score₂; `status` = `confident` / `uncertain` / `not_found` по порогам `CONFIDENCE_MARGIN` и `NOT_FOUND_SCORE`. |
 | Доп. функционал | — | следующий этап (сомелье, аналоги) — строится поверх `/v1/search` и `/v1/wines`. |
 
 ## Recognition Engine — точка подключения CV
