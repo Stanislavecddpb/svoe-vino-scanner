@@ -1,0 +1,32 @@
+[project]
+name = "wine-ml"
+version = "0.1.0"
+description = "Wine label recognition: image normalization, SigLIP 2 embeddings, catalog/index tooling"
+requires-python = ">=3.11"
+dependencies = [
+  "torch>=2.3",
+  "transformers>=4.49",
+  "sentencepiece",
+  "protobuf",
+  "fastapi>=0.110",
+  "uvicorn[standard]",
+  "python-multipart",
+  "pillow>=10",
+  "numpy",
+  "psycopg[binary]>=3.1",
+  "pgvector>=0.2",
+  "tqdm",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "httpx"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["wine_ml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
