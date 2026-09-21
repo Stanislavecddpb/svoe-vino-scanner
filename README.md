@@ -4,7 +4,7 @@
 Кейс РСХБ.Цифра «Сканер российских вин с описанием на платформе „Своё вино“».
 
 Текущий этап: **каркас backend + CV baseline** (SigLIP 2 + pgvector, без OCR и дообучения).
-Устройство — в [ARCHITECTURE.md](ARCHITECTURE.md).
+Устройство — в [ARCHITECTURE.md](ARCHITECTURE.md). Что сделано для точности и идеи — в [docs/PRESENTATION.md](docs/PRESENTATION.md).
 
 ## Состав
 
