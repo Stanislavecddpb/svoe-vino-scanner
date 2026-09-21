@@ -21,6 +21,13 @@ export const appConfig = {
   get labelWeight() {
     return Number(process.env.LABEL_WEIGHT ?? 0.5)
   },
+  /** re-rank the visual Top-K by label text (ml /analyze + /rerank) */
+  get ocrEnabled() {
+    return !['0', 'false', 'no'].includes((process.env.OCR_ENABLED ?? '1').toLowerCase())
+  },
+  get rerankK() {
+    return Number(process.env.RERANK_K ?? 10)
+  },
   get notFoundScore() {
     return Number(process.env.NOT_FOUND_SCORE ?? 0.72)
   },

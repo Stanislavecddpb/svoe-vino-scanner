@@ -60,14 +60,15 @@ def _label_closeup(im: Image.Image, rng: random.Random) -> Image.Image:
     return im.crop((0, int(top), w, int(min(h, top + band))))
 
 
-def field_like(ref: Image.Image, rng: random.Random, closeup_p: float = 0.5) -> Image.Image:
+def field_like(ref: Image.Image, rng: random.Random, closeup_p: float = 0.5,
+               max_side: int = 768) -> Image.Image:
     """Synthetic field photo from a reference image (deterministic for a given rng state).
 
     With probability ``closeup_p`` it is a label close-up (label fills the frame,
     like the public field photos), otherwise a whole-bottle shot.
     """
     im = ImageOps.exif_transpose(ref).convert("RGBA")
-    im.thumbnail((768, 768))
+    im.thumbnail((max_side, max_side))  # 768: fast CV eval; ~2048: label text stays readable (OCR eval)
     closeup = rng.random() < closeup_p
 
     if closeup:

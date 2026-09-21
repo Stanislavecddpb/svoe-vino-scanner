@@ -17,9 +17,16 @@ wine_ml/twins.py) are reported separately and excluded from the main rows.
 Query embeddings are cached in reports/cache/, so comparing index variants
 (e.g. ``--views full`` vs all views) re-uses exactly the same queries.
 
+With ``--ocr`` the visual Top-k is re-ranked by label text exactly like the
+service (wine_ml.text_match.rerank); OCR results are cached too. Use
+``--hires`` for OCR: at the default 768 px the synthetic labels are too small
+to read, which understates OCR (see docs/PRESENTATION.md).
+
 Usage:
   python ml/scripts/evaluate.py --views full --tag baseline
   python ml/scripts/evaluate.py --tag multiview
+  python ml/scripts/evaluate.py --limit 300 --hires --ocr --sweep      # tune OCR_ALPHA / OCR_BETA
+  python ml/scripts/evaluate.py --limit 300 --hires --ocr --tag ocr
   python ml/scripts/evaluate.py --labels labels.tsv --images-dir photos/
 """
 from __future__ import annotations
@@ -36,9 +43,10 @@ from PIL import Image
 from tqdm import tqdm
 
 from wine_ml.augment import field_like
-from wine_ml.config import DEVICE, MODEL_NAME
+from wine_ml.config import DEVICE, MODEL_NAME, OCR_ALPHA, OCR_BETA
 from wine_ml.db import connect, fetch_embeddings
 from wine_ml.preprocess import normalize_image
+from wine_ml.text_match import rerank
 from wine_ml.twins import TWIN_THRESHOLD, twin_groups
 from wine_ml.views import LABEL_WEIGHT, VIEWS
 
@@ -58,6 +66,7 @@ def load_queries(args, wines_in_index: list[str]) -> list[tuple[str, callable]]:
         return out
 
     catalog = {json.loads(l)["slug"]: json.loads(l) for l in (args.catalog / "wines.jsonl").open(encoding="utf-8")}
+    max_side = 2048 if args.hires else 768
     rng = random.Random(args.seed)
     chosen = sorted(wines_in_index)
     if args.limit:
@@ -67,7 +76,7 @@ def load_queries(args, wines_in_index: list[str]) -> list[tuple[str, callable]]:
         path = args.catalog / "images" / catalog[slug]["image_file"]
         for _ in range(args.n_aug):
             seed = rng.randint(0, 2**31)
-            out.append((slug, lambda p=path, s=seed: field_like(Image.open(p), random.Random(s))))
+            out.append((slug, lambda p=path, s=seed: field_like(Image.open(p), random.Random(s), max_side=max_side)))
     return out
 
 
@@ -76,7 +85,7 @@ def embed_queries(args, queries) -> tuple[np.ndarray, float]:
     cache = None
     if not args.labels:
         cache = args.out / "cache" / (f"q-{args.model.split('/')[-1]}-seed{args.seed}"
-                                      f"-n{args.n_aug}-limit{args.limit}.npz")
+                                      f"-n{args.n_aug}-limit{args.limit}{'-hires' if args.hires else ''}.npz")
         if cache.exists():
             z = np.load(cache, allow_pickle=False)
             if list(z["slugs"]) == [s for s, _ in queries]:
@@ -115,6 +124,51 @@ def combine_views(per_view: dict[str, np.ndarray], label_weight: float) -> np.nd
     return (1 - label_weight) * per_view["full"] + label_weight * best_label
 
 
+def ocr_queries(args, queries) -> list[list[dict]]:
+    """OCR items per query (cached for synthetic mode); images are regenerated deterministically."""
+    cache = None
+    if not args.labels:
+        cache = args.out / "cache" / f"ocr-seed{args.seed}-n{args.n_aug}-limit{args.limit}{'-hires' if args.hires else ''}.json"
+        if cache.exists():
+            z = json.loads(cache.read_text(encoding="utf-8"))
+            if z["slugs"] == [s for s, _ in queries]:
+                print(f"OCR from cache: {cache}")
+                return z["ocr"]
+
+    from wine_ml.config import resolve_device
+    from wine_ml.ocr import OcrEngine
+
+    engine = OcrEngine(resolve_device(args.device))
+    t0 = time.perf_counter()
+    out = [engine.read(load()) for _, load in tqdm(queries, unit="img", desc="ocr")]
+    print(f"OCR: {1000 * (time.perf_counter() - t0) / max(len(queries), 1):.0f} ms/img")
+    if cache:
+        cache.parent.mkdir(parents=True, exist_ok=True)
+        cache.write_text(json.dumps({"slugs": [s for s, _ in queries], "ocr": out}, ensure_ascii=False), encoding="utf-8")
+    return out
+
+
+def rank_rows(queries, scores: np.ndarray, wines: list[str], catalog: dict, ocr: list | None,
+              k: int, alpha: float, beta: float) -> list[dict]:
+    """Rank of the true wine per query; with OCR the visual Top-k is re-ranked by text (same code as /rerank)."""
+    pos = {s: i for i, s in enumerate(wines)}
+    order = np.argsort(-scores, axis=1)
+    rows = []
+    for qi, ((slug, _), sc, od) in enumerate(zip(queries, scores, order)):
+        ranked = [wines[j] for j in od]
+        final = [float(sc[j]) for j in od[:2]]
+        if ocr is not None:
+            cands = [{**{f: catalog[wines[j]].get(f) for f in ("name", "winery", "grapes", "category")},
+                      "slug": wines[j], "visual": float(sc[j])} for j in od[:k]]
+            rr = rerank(ocr[qi], cands, alpha, beta)
+            ranked = [c["slug"] for c in rr] + ranked[k:]
+            final = [rr[0]["final"], rr[1]["final"]]
+        rank = ranked.index(slug) + 1 if slug in pos else len(wines) + 1
+        rows.append({"slug": slug, "rank": rank, "pred": ranked[0], "score1": float(sc[od[0]]),
+                     "margin": final[0] - final[1], "top5": ranked[:5]})
+    return rows
+
+
 def summarize(rows: list[dict], margin_thr: float) -> dict:
     if not rows:
         return {"n": 0}
@@ -140,6 +194,13 @@ def main() -> None:
     ap.add_argument("--views", default=",".join(VIEWS), help="index views to search (comma-separated)")
     ap.add_argument("--label-weight", type=float, default=LABEL_WEIGHT,
                     help="score = (1-w)*full + w*best label view (same as web LABEL_WEIGHT)")
+    ap.add_argument("--ocr", action="store_true", help="re-rank the visual Top-k by label text (OCR)")
+    ap.add_argument("--rerank-k", type=int, default=10)
+    ap.add_argument("--alpha", type=float, default=OCR_ALPHA, help="final = visual + alpha*text - beta*conflicts")
+    ap.add_argument("--beta", type=float, default=OCR_BETA)
+    ap.add_argument("--sweep", action="store_true", help="with --ocr: print a grid over alpha/beta and exit")
+    ap.add_argument("--hires", action="store_true",
+                    help="synthetic queries at up to 2048 px (label text readable for OCR) instead of 768 px")
     ap.add_argument("--n-aug", type=int, default=2)
     ap.add_argument("--limit", type=int, default=0, help="evaluate a random subset of wines")
     ap.add_argument("--seed", type=int, default=42)
@@ -176,17 +237,21 @@ def main() -> None:
 
     q, embed_ms = embed_queries(args, queries)
     scores = combine_views({v: q @ x.T for v, (_, x) in per_view_index.items()}, args.label_weight)
-    wines = full_slugs
-    pos = {s: i for i, s in enumerate(wines)}
-    order = np.argsort(-scores, axis=1)
+    catalog = {json.loads(l)["slug"]: json.loads(l) for l in (args.catalog / "wines.jsonl").open(encoding="utf-8")}
+    ocr = ocr_queries(args, queries) if args.ocr else None
 
-    rows = []
-    for (slug, _), sc, od in zip(queries, scores, order):
-        rank = int(np.where(od == pos[slug])[0][0]) + 1
-        rows.append({"slug": slug, "rank": rank, "pred": wines[od[0]],
-                     "score1": float(sc[od[0]]), "margin": float(sc[od[0]] - sc[od[1]]),
-                     "top5": [wines[j] for j in od[:5]]})
+    if args.sweep:
+        clean_idx = [i for i, (s, _) in enumerate(queries) if s not in twins]
+        print("alpha  beta  | top1   top5   | near-dup top1")
+        for alpha in (0.0, 0.02, 0.05, 0.1, 0.15, 0.2, 0.3):
+            for beta in (0.0, 0.01, 0.02, 0.05):
+                rows = rank_rows(queries, scores, full_slugs, catalog, ocr, args.rerank_k, alpha, beta)
+                c = [rows[i] for i in clean_idx]
+                m, nd = summarize(c, args.margin), summarize([r for r in c if r["slug"] in hard], args.margin)
+                print(f"{alpha:<5}  {beta:<4}  | {m['top1']:.1%}  {m['top5']:.1%}  | {nd['top1']:.1%}")
+        return
 
+    rows = rank_rows(queries, scores, full_slugs, catalog, ocr, args.rerank_k, args.alpha, args.beta)
     clean = [r for r in rows if r["slug"] not in twins]
     metrics = {
         "all_without_twins": summarize(clean, args.margin),
@@ -194,7 +259,7 @@ def main() -> None:
         "distinct": summarize([r for r in clean if r["slug"] not in hard], args.margin),
         "twins": summarize([r for r in rows if r["slug"] in twins], args.margin),
     }
-    mode = "labeled" if args.labels else f"synthetic x{args.n_aug}"
+    mode = ("labeled" if args.labels else f"synthetic x{args.n_aug}" + (" hires" if args.hires else "")) + (f", OCR rerank top-{args.rerank_k} a={args.alpha} b={args.beta}" if args.ocr else "")
     report = {
         "date": datetime.now().isoformat(timespec="seconds"),
         "model": args.model, "views": views, "mode": mode,

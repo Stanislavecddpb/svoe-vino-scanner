@@ -31,7 +31,9 @@ export async function runSearch(event: H3Event): Promise<SearchResponse> {
     top5,
     margin,
     confident: margin !== null && margin >= appConfig.confidenceMargin,
-    status: recognitionStatus(top5[0]?.score ?? null, margin, {
+    // "not in catalog" is decided by the best *visual* match: label text must not pull in a wine
+    // that does not look like the photo
+    status: recognitionStatus(top5.length ? Math.max(...top5.map(c => c.visual ?? c.score)) : null, margin, {
       notFoundScore: appConfig.notFoundScore,
       confidenceMargin: appConfig.confidenceMargin,
     }),

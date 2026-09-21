@@ -49,4 +49,7 @@ if ($Cpu) { $env:DEVICE = "cpu" }
 & $py ml\scripts\build_index.py; Check   # views: full + label_mid + label_low
 & $py ml\scripts\find_twins.py; Check    # data/catalog/twins.csv
 
+Step "OCR models (EasyOCR ru+en, ~100 MB) - downloaded now so the demo works offline"
+& $py -c "from wine_ml.ocr import OcrEngine; OcrEngine('cpu')"; Check
+
 Write-Host "`nDone. Start the service: .\scripts\dev.ps1" -ForegroundColor Green

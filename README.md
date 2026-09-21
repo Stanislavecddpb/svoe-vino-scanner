@@ -62,7 +62,7 @@ docker compose -f docker-compose.yml -f docker-compose.gpu.yml --profile full up
 | `GET` | `/health` | `{status, engine, model, db: {wines, indexed}, ml}` |
 
 Ошибки: `{"error": "..."}` — 400 (нет `image`, не картинка), 404, 413 (>15 МБ), 503 (ml/БД недоступны).
-`score` — косинусное сходство фото с эталоном; `margin` — отрыв Top-1 от Top-2; `confident` — `margin ≥ CONFIDENCE_MARGIN`.
+`score` — итоговый скор (визуальное сходство + бонус за совпадение текста этикетки); у кандидатов также `visual` и `text` (доля названия, подтверждённая OCR); `margin` — отрыв Top-1 от Top-2; `confident` — `margin ≥ CONFIDENCE_MARGIN`.
 `status`: `confident` (одна карточка), `uncertain` (карточка + «Не то вино?» раскрыто), `not_found` (score₁ < `NOT_FOUND_SCORE` — «нет в каталоге» + похожие).
 
 ## Интерфейс
@@ -81,6 +81,9 @@ docker compose -f docker-compose.yml -f docker-compose.gpu.yml --profile full up
 | `CONFIDENCE_MARGIN` | `0.03` | web | порог отрыва для `confident` |
 | `NOT_FOUND_SCORE` | `0.72` | web | ниже этого score₁ — «нет в каталоге» |
 | `LABEL_WEIGHT` | `0.5` | web | score вина = (1 − w)·бутылка + w·лучшая зона этикетки |
+| `OCR_ENABLED` | `1` | web, ml | OCR-переранжирование Top-K по тексту этикетки (`0` — только картинка) |
+| `RERANK_K` | `10` | web | сколько визуальных кандидатов переранжировать |
+| `OCR_ALPHA` / `OCR_BETA` | `0.1` / `0.05` | ml | final = visual + α·совпадение текста − β·противоречия (цвет, сахар, год) |
 | `ML_TIMEOUT_MS` | `8000` | web | таймаут запроса к ml |
 | `CATALOG_IMAGES_DIR` | `../data/catalog/images` | web | фото каталога |
 | `HF_HUB_OFFLINE` | — | ml | `1` — не ходить в сеть за моделью (после первой загрузки) |
@@ -126,6 +129,7 @@ cd web; npx vitest run                     # контракт API на stub-дв
 ## Ограничения
 
 - Публичный eval-набор — 3 фото без ответов; реальная точность пока не измерима, синтетика — ориентир.
-- Near-duplicates (одна этикетка, разный год/категория) визуально почти неразличимы — нужен OCR (следующий этап).
+- Near-duplicates (одна этикетка, разный год/категория) визуально почти неразличимы — их добивает OCR-переранжирование; его реальный эффект можно измерить только на размеченных фото.
+- С OCR ответ ~1.2 с (без OCR ~0.75 с); OCR-модели (~100 МБ) качаются при `setup.ps1`.
 - 139 позиций каталога исключены из индекса до исправления датасета.
 - Первый запуск качает модель (~4.5 ГБ) с Hugging Face.

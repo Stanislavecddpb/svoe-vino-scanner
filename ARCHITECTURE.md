@@ -11,11 +11,15 @@ web — Nuxt 3 / Nitro, :8080 ────────────────�
    │ 2. RecognitionEngine.recognize(image, k=5)   ← ENGINE=vector|stub     │
    │ 3. ответ: /v1/eval/predict → {"slug"} ; /v1/search → top1/top5/margin │
    └──────────┬───────────────────────────────────────────────┬──────────┘
-              │ POST /embed (VectorEngine)                     │ SQL
+              │ 1) POST /analyze  2) POST /rerank              │ SQL: визуальный Top-10
               ▼                                                ▼
 ml — FastAPI, :8001                                  Postgres 16 + pgvector
-   нормализация фото → SigLIP 2 → L2-вектор          wines, wine_embeddings
+   /analyze: нормализация → SigLIP 2 → вектор        wines, wine_embeddings
+             ‖ параллельно EasyOCR → текст + координаты
+   /rerank:  Top-10 + текст → финальный порядок
 ```
+
+VectorEngine: `/analyze` (вектор + OCR) → pgvector Top-`RERANK_K` по визуальному скору → `/rerank` → Top-5 по финальному скору. При `OCR_ENABLED=0` — `/embed` и только визуальный скор.
 
 ## Слои
 
@@ -24,8 +28,9 @@ ml — FastAPI, :8001                                  Postgres 16 + pgvector
 | Нормализация фото | `ml/wine_ml/preprocess.py` | EXIF-поворот → RGB, прозрачность → белый → обрезка белых полей → уменьшение до 1024 → паддинг до квадрата. Одна функция для эталонов, запросов и оценки, чтобы векторы были сопоставимы. |
 | Извлечение признаков | `ml/wine_ml/embedder.py` | SigLIP 2 (`google/siglip2-so400m-patch14-384`, 1152-d), fp16 на GPU, L2-нормировка. |
 | Поиск по каталогу | `web/server/utils/engine/vector.ts` | косинусное расстояние `<=>` в pgvector по всем видам вина (бутылка + 2 зоны этикетки, `ml/wine_ml/views.py`); score вина = (1 − w)·бутылка + w·лучшая зона этикетки, w = `LABEL_WEIGHT` (0.5); точный перебор (≈6k векторов), Top-5. |
+| OCR-переранжирование | `ml/wine_ml/ocr.py`, `ml/wine_ml/text_match.py` | EasyOCR (ru+en) читает этикетку; для каждого из Top-10: доля названия/винодельни, подтверждённая текстом (нечёткое сравнение в транслите, веса IDF внутри Top-10, вес текста падает к краям кадра — соседние бутылки), штраф за противоречия (цвет, сахар, год). final = visual + α·text − β·conflicts. Та же функция в `evaluate.py --ocr`. |
 | Выдача карточки | `web/server/routes/v1/wines/[slug]/`, `web/pages/wine/[slug].vue` | карточка вина из таблицы `wines` + фото каталога. |
-| Уверенность | `web/server/utils/search.ts`, `status.ts` | `score` = косинусное сходство; `margin` = score₁ − score₂; `status` = `confident` / `uncertain` / `not_found` по порогам `CONFIDENCE_MARGIN` и `NOT_FOUND_SCORE`. |
+| Уверенность | `web/server/utils/search.ts`, `status.ts` | `score` = итоговый скор; `margin` = score₁ − score₂; `status` = `confident` / `uncertain` / `not_found` по порогам `CONFIDENCE_MARGIN` (по финальному скору) и `NOT_FOUND_SCORE` (по лучшему **визуальному** скору: текст не должен «вытягивать» вино, не похожее на фото). |
 | Доп. функционал | — | следующий этап (сомелье, аналоги) — строится поверх `/v1/search` и `/v1/wines`. |
 
 ## Recognition Engine — точка подключения CV
@@ -70,6 +75,8 @@ data/raw/strapi_output0709.csv + data/raw/strapi/.../uploads
 
 ## Куда расти
 
-1. OCR-переранжирование внутри Top-5 (год, «брют/сухое», название) — главный инструмент против near-duplicates.
-2. Несколько векторов на вино (бутылка целиком + зона этикетки) — снижает разрыв «крупный план vs студийное фото».
-3. Дообучение SigLIP 2 (контрастивно, на синтетике/полевых фото) на 4060.
+1. Размеченные реальные фото → калибровка `LABEL_WEIGHT`, `OCR_ALPHA/BETA`, порогов уверенности.
+2. OCR только по центральной части кадра / меньшему разрешению — быстрее и меньше текста соседних бутылок.
+3. Облачный OCR (Yandex Vision) за тем же интерфейсом `OcrEngine.read()`.
+4. Дообучение SigLIP 2 (контрастивно, на синтетике/полевых фото) на 4060.
+(Сделано: несколько векторов на вино, OCR-переранжирование — см. `docs/PRESENTATION.md`.)
