@@ -84,3 +84,17 @@ def test_rerank_requires_visual_score():
     with client() as c:
         r = c.post("/rerank", json={"ocr": [], "candidates": [{"slug": "a"}]})
     assert r.status_code == 422
+
+
+class SlowOcr:
+    def read(self, im):
+        import time
+        time.sleep(0.5)
+        return [{"text": "late", "conf": 1.0}]
+
+
+def test_analyze_answers_without_ocr_when_ocr_is_slow(monkeypatch):
+    monkeypatch.setattr("wine_ml.service.OCR_TIMEOUT_S", 0.1)
+    with TestClient(create_app(lambda: Fake(), lambda: SlowOcr())) as c:
+        body = c.post("/analyze", files={"image": ("x.png", png(), "image/png")}).json()
+    assert body["ocr"] == [] and body["ocr_timeout"] is True and len(body["embedding"]) == 4

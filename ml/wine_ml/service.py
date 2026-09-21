@@ -16,7 +16,7 @@ from typing import Callable
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from pydantic import BaseModel
 
-from wine_ml.config import MAX_UPLOAD_BYTES, OCR_ALPHA, OCR_BETA
+from wine_ml.config import MAX_UPLOAD_BYTES, OCR_ALPHA, OCR_BETA, OCR_TIMEOUT_S
 from wine_ml.preprocess import load_image, normalize_image
 from wine_ml.text_match import rerank
 
@@ -78,7 +78,15 @@ def create_app(embedder_factory: Callable, ocr_factory: Callable | None = None) 
     async def analyze(image: UploadFile = File(...)) -> dict:
         raw = await read_upload(image)
         # embedding and OCR run concurrently (both release the GIL on GPU work)
-        emb, ocr = await asyncio.gather(asyncio.to_thread(embed_image, raw), asyncio.to_thread(ocr_image, raw))
+        ocr_task = asyncio.create_task(asyncio.to_thread(ocr_image, raw))
+        emb = await asyncio.to_thread(embed_image, raw)
+        # OCR only refines the ranking: if it is slow (busy GPU, huge photo), answer by the image alone
+        # instead of letting the whole request time out (organizer script: 10 s hard limit)
+        try:
+            ocr = await asyncio.wait_for(ocr_task, timeout=OCR_TIMEOUT_S)
+        except asyncio.TimeoutError:
+            print(f"[analyze] OCR exceeded {OCR_TIMEOUT_S}s, answering without text")
+            ocr = {"ocr": [], "ocr_ms": None, "ocr_timeout": True}
         return {**emb, **ocr}
 
     @app.post("/rerank")

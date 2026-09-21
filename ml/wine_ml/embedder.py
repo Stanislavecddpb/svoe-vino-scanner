@@ -15,7 +15,12 @@ class Embedder:
         self.device = resolve_device(device)
         dtype = torch.float16 if self.device == "cuda" else torch.float32
         self.processor = AutoProcessor.from_pretrained(model_name)
-        self.model = AutoModel.from_pretrained(model_name, dtype=dtype).to(self.device).eval()
+        model = AutoModel.from_pretrained(model_name, dtype=dtype).eval()
+        # Only image features are used: drop the text tower before moving to the GPU
+        # (~half of the weights; frees VRAM for OCR). Image embeddings are unchanged.
+        if hasattr(model, "text_model"):
+            model.text_model = None
+        self.model = model.to(self.device)
         self.dtype = dtype
         self.dim = int(self.model.config.vision_config.hidden_size)
 

@@ -38,3 +38,5 @@ def make_ocr_engine(device: str = DEVICE):
     from wine_ml.ocr import OcrEngine
 
     return OcrEngine(resolve_device(device))
+# /analyze waits at most this long for OCR, then answers by the image alone
+OCR_TIMEOUT_S = float(os.getenv("OCR_TIMEOUT_S", "3"))

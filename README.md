@@ -3,7 +3,7 @@
 Фото бутылки/этикетки → поиск по каталогу «Своё вино» → slug вина, Top-5 кандидатов со скорами и карточка.
 Кейс РСХБ.Цифра «Сканер российских вин с описанием на платформе „Своё вино“».
 
-Текущий этап: **каркас backend + CV baseline** (SigLIP 2 + pgvector, без OCR и дообучения).
+Распознавание: SigLIP 2 (бутылка + зоны этикетки) → pgvector → OCR-переранжирование Top-10 по тексту этикетки; без дообучения.
 Устройство — в [ARCHITECTURE.md](ARCHITECTURE.md). Что сделано для точности и идеи — в [docs/PRESENTATION.md](docs/PRESENTATION.md).
 
 ## Состав
@@ -21,7 +21,7 @@
 ## Требования
 
 Windows + PowerShell, Python 3.11+, Node 20+, Docker Desktop, 7-Zip (для распаковки датасета).
-GPU NVIDIA желательна (SigLIP 2 so400m в fp16 занимает ~2.3 ГБ VRAM); без неё работает на CPU медленнее.
+GPU NVIDIA желательна: визуальная часть SigLIP 2 so400m в fp16 ~0.9 ГБ VRAM, вместе с EasyOCR ~2.3 ГБ; без GPU работает на CPU медленнее.
 Для скрипта кейсодержателя: Git Bash + `jq` (`winget install jqlang.jq`).
 
 ## Быстрый старт
@@ -86,6 +86,10 @@ docker compose -f docker-compose.yml -f docker-compose.gpu.yml --profile full up
 | `OCR_ALPHA` / `OCR_BETA` | `0.1` / `0.05` | ml | final = visual + α·совпадение текста − β·противоречия (цвет, сахар, год) |
 | `OCR_PROVIDER` | `easyocr` | ml | `easyocr` (локально) или `yandex` (Yandex Vision OCR, облако) |
 | `YC_OCR_API_KEY`, `YC_FOLDER_ID` | — | ml | ключ и каталог Yandex Cloud для `OCR_PROVIDER=yandex` |
+| `OCR_TIMEOUT_S` | `3` | ml | если OCR не успел — ответ только по картинке (запрос не падает по таймауту) |
+| `ML_TIMEOUT_MS` | `8000` | web | таймаут запроса к ml |
+| `CATALOG_IMAGES_DIR` | `../data/catalog/images` | web | фото каталога |
+| `HF_HUB_OFFLINE` | — | ml | `1` — не ходить в сеть за моделью (после первой загрузки) |
 
 ### Yandex Vision OCR вместо EasyOCR
 
@@ -101,9 +105,6 @@ $env:OCR_PROVIDER = "yandex"; $env:YC_OCR_API_KEY = "<ключ>"; $env:YC_FOLDER
 `GET http://127.0.0.1:8001/health` покажет `"ocr": "yandex"`. Ключ не храните в репозитории (`.env` в `.gitignore`).
 Если облако недоступно, сервис не падает — отвечает только по картинке (в логе `[yandex-ocr] request failed`).
 Сравнить движки на синтетике: `OCR_PROVIDER=yandex evaluate.py --limit 300 --hires --ocr` (кэш OCR хранится отдельно для каждого провайдера). Сервис платный (тарифицируется за запрос).
-| `ML_TIMEOUT_MS` | `8000` | web | таймаут запроса к ml |
-| `CATALOG_IMAGES_DIR` | `../data/catalog/images` | web | фото каталога |
-| `HF_HUB_OFFLINE` | — | ml | `1` — не ходить в сеть за моделью (после первой загрузки) |
 
 ## Данные
 
