@@ -6,7 +6,8 @@ export default defineEventHandler(async () => {
   try {
     const { rows } = await getPool().query(
       `SELECT (SELECT count(*) FROM wines)::int AS wines,
-              (SELECT count(*) FROM wine_embeddings WHERE model = $1)::int AS indexed`,
+              (SELECT count(DISTINCT slug) FROM wine_embeddings WHERE model = $1)::int AS indexed,
+              (SELECT array_agg(DISTINCT view) FROM wine_embeddings WHERE model = $1) AS views`,
       [appConfig.modelName],
     )
     db = { ok: true, ...rows[0] }

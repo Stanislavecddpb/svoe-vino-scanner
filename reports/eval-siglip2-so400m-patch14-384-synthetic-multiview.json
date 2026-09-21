@@ -1,0 +1,759 @@
+{
+  "date": "2026-09-21T14:21:23",
+  "model": "google/siglip2-so400m-patch14-384",
+  "views": [
+    "full",
+    "label_mid",
+    "label_low"
+  ],
+  "mode": "synthetic x2",
+  "index_wines": 1964,
+  "near_duplicate_refs": 962,
+  "twin_refs": 67,
+  "margin_threshold": 0.03,
+  "embed_ms_per_image": 91.6,
+  "metrics": {
+    "all_without_twins": {
+      "n": 3794,
+      "top1": 0.6523,
+      "top5": 0.8577,
+      "top10": 0.9025,
+      "mean_margin_correct": 0.0483,
+      "mean_top1_score": 0.7906,
+      "confident_share": 0.4051,
+      "confident_top1": 0.9597
+    },
+    "near_duplicates": {
+      "n": 1790,
+      "top1": 0.5849,
+      "top5": 0.862,
+      "top10": 0.9067,
+      "mean_margin_correct": 0.0278,
+      "mean_top1_score": 0.795,
+      "confident_share": 0.2419,
+      "confident_top1": 0.9353
+    },
+    "distinct": {
+      "n": 2004,
+      "top1": 0.7126,
+      "top5": 0.8538,
+      "top10": 0.8987,
+      "mean_margin_correct": 0.0634,
+      "mean_top1_score": 0.7867,
+      "confident_share": 0.5509,
+      "confident_top1": 0.9692
+    },
+    "twins": {
+      "n": 134,
+      "top1": 0.3806,
+      "top5": 0.9254,
+      "top10": 0.9627,
+      "mean_margin_correct": 0.0022,
+      "mean_top1_score": 0.7975,
+      "confident_share": 0.0075,
+      "confident_top1": 0.0
+    }
+  },
+  "errors_sample": [
+    {
+      "slug": "a-gordienko-m-nikolaev-pino-nuar-krasnoe-suhoe-135",
+      "rank": 4,
+      "pred": "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+      "score1": 0.78776615858078,
+      "margin": 0.003228485584259033,
+      "top5": [
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "radiowine-kaberne-fran-krasnoe-suhoe-14",
+        "aya-organic-wine-vineyards-evolution-pinot-noir-pino-nuar-krasnoe-suhoe-125",
+        "a-gordienko-m-nikolaev-pino-nuar-krasnoe-suhoe-135",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14"
+      ]
+    },
+    {
+      "slug": "a-gordienko-m-nikolaev-sira-nuvo-krasnoe-suhoe-115",
+      "rank": 8,
+      "pred": "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+      "score1": 0.7922097444534302,
+      "margin": 0.03086721897125244,
+      "top5": [
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "radiowine-kaberne-fran-krasnoe-suhoe-14",
+        "vinodelnya-zhakov-shardone-eskeyp-beloe-suhoe-12",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "a-gordienko-m-nikolaev-pino-nuar-krasnoe-suhoe-135"
+      ]
+    },
+    {
+      "slug": "a-gordienko-m-nikolaev-sira-nuvo-krasnoe-suhoe-115",
+      "rank": 7,
+      "pred": "radiowine-kaberne-fran-krasnoe-suhoe-14",
+      "score1": 0.7783983945846558,
+      "margin": 0.0018085241317749023,
+      "top5": [
+        "radiowine-kaberne-fran-krasnoe-suhoe-14",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "a-gordienko-m-nikolaev-pino-nuar-krasnoe-suhoe-135",
+        "stn-winery-syrah-sira-krasnoe-suhoe-13",
+        "stn-winery-cyberpunk-pino-nuar-krasnoe-suhoe-12"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-abrau-durso-brut-rose-reserve-pino-nuar-beloe-bryut-12",
+      "rank": 8,
+      "pred": "inkermanskiy-zmv-inkerman-bryut-shardone-beloe-135",
+      "score1": 0.687118411064148,
+      "margin": 0.01599067449569702,
+      "top5": [
+        "inkermanskiy-zmv-inkerman-bryut-shardone-beloe-135",
+        "inkermanskiy-zmv-inkerman-bryut-rkatsiteli-beloe-12",
+        "mont-blanc-blanc-de-blancs",
+        "mont-blanc-cuvee",
+        "abrau-dyurso-imperial-kyuve-pino-nuar-rozovoe-bryut-125"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-abrau-dyurso-pino-nuar-krasnoe-suhoe-13",
+      "rank": 2,
+      "pred": "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+      "score1": 0.8075833320617676,
+      "margin": 0.027137279510498047,
+      "top5": [
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "abrau-dyurso-abrau-dyurso-pino-nuar-krasnoe-suhoe-13",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "abrau-dyurso-pino-nuar-krasnoe-suhoe-12",
+        "valeriy-zaharin-dom-zaharinyh-beloe-sary-pandas-suhoe-115"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-abrau-dyurso-pino-nuar-krasnoe-suhoe-13",
+      "rank": 29,
+      "pred": "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+      "score1": 0.7735321521759033,
+      "margin": 0.0040343403816223145,
+      "top5": [
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+        "agrolayn-vexillum-blanc-de-noirs-pino-nuar-beloe-bryut-12",
+        "agrolayn-vexillum-blanc-de-blancs-shardone-beloe-bryut-115"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-abrau-estates-krasnoe-kaberne-sovinon-suhoe-13",
+      "rank": 2,
+      "pred": "abrau-dyurso-abrau-estates-kaberne-po-belomu-kaberne-sovinon-beloe-suhoe-105",
+      "score1": 0.8056920766830444,
+      "margin": 0.022748053073883057,
+      "top5": [
+        "abrau-dyurso-abrau-estates-kaberne-po-belomu-kaberne-sovinon-beloe-suhoe-105",
+        "abrau-dyurso-abrau-estates-krasnoe-kaberne-sovinon-suhoe-13",
+        "abrau-dyurso-abrau-estates-roze-kaberne-sovinon-rozovoe-suhoe-12",
+        "abrau-dyurso-abrau-estates-beloe-shardone-suhoe-12",
+        "abrau-dyurso-abrau-estates-amurskiy-potapenko-krasnoe-suhoe-105"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-abrau-estates-oranzh-tsitronnyy-magaracha-oranzhevoe-suhoe-105",
+      "rank": 7,
+      "pred": "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+      "score1": 0.7000967264175415,
+      "margin": 0.019016742706298828,
+      "top5": [
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "valeriy-zaharin-dom-zaharinyh-beloe-sary-pandas-suhoe-115",
+        "abrau-dyurso-abrau-estates-kaberne-po-belomu-kaberne-sovinon-beloe-suhoe-105",
+        "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+        "fanagoriya-tochka-saperavi-krasnoe-suhoe-14"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-aleksandr-ii-magnum-shardone-beloe-bryut-125",
+      "rank": 92,
+      "pred": "usadba-perovskih-blanc-de-blancs-shardone-beloe-ekstra-bryut-11",
+      "score1": 0.7387512922286987,
+      "margin": 0.006425917148590088,
+      "top5": [
+        "usadba-perovskih-blanc-de-blancs-shardone-beloe-ekstra-bryut-11",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "zolotaya-balka-chernyy-prints-shardone-beloe-ekstra-bryut-12",
+        "rozovoe-polusladkoe",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-125",
+      "rank": 2,
+      "pred": "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-12",
+      "score1": 0.7979320287704468,
+      "margin": 0.022513985633850098,
+      "top5": [
+        "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-12",
+        "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-125",
+        "abrau-dyurso-brut-dor-blanc-de-noirs-pino-nuar-beloe-bryut-115",
+        "abrau-dyurso-brut-dor-blanc-de-noirs-pino-nuar-beloe-bryut-125",
+        "abrau-dyurso-brut-dor-rose-pino-nuar-rozovoe-bryut-12"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-125",
+      "rank": 2,
+      "pred": "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-12",
+      "score1": 0.8469950556755066,
+      "margin": 0.011197090148925781,
+      "top5": [
+        "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-12",
+        "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-125",
+        "abrau-dyurso-brut-dor-blanc-de-noirs-pino-nuar-beloe-bryut-115",
+        "abrau-dyurso-brut-dor-riesling-risling-beloe-bryut-12",
+        "abrau-dyurso-brut-dor-rose-pino-nuar-rozovoe-bryut-12"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-brut-dor-blanc-de-noirs-pino-nuar-beloe-bryut-115",
+      "rank": 2,
+      "pred": "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-12",
+      "score1": 0.8504927158355713,
+      "margin": 0.013477802276611328,
+      "top5": [
+        "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-12",
+        "abrau-dyurso-brut-dor-blanc-de-noirs-pino-nuar-beloe-bryut-115",
+        "abrau-dyurso-brut-dor-riesling-risling-beloe-bryut-12",
+        "abrau-dyurso-brut-dor-blanc-de-noirs-pino-nuar-beloe-bryut-125",
+        "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-125"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-brut-dor-blanc-de-noirs-pino-nuar-beloe-bryut-125",
+      "rank": 2,
+      "pred": "abrau-dyurso-brut-dor-blanc-de-noirs-pino-nuar-beloe-bryut-115",
+      "score1": 0.8641622066497803,
+      "margin": 0.003297269344329834,
+      "top5": [
+        "abrau-dyurso-brut-dor-blanc-de-noirs-pino-nuar-beloe-bryut-115",
+        "abrau-dyurso-brut-dor-blanc-de-noirs-pino-nuar-beloe-bryut-125",
+        "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-125",
+        "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-12",
+        "abrau-dyurso-brut-dor-riesling-risling-beloe-bryut-12"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-brut-dor-blanc-de-noirs-pino-nuar-beloe-bryut-125",
+      "rank": 19,
+      "pred": "inkermanskiy-zmv-inkerman-bryut-shardone-beloe-135",
+      "score1": 0.7298824787139893,
+      "margin": 0.01154029369354248,
+      "top5": [
+        "inkermanskiy-zmv-inkerman-bryut-shardone-beloe-135",
+        "zolotaya-balka-chernyy-prints-shardone-beloe-ekstra-bryut-12",
+        "abrau-dyurso-imperial-kyuve-pino-nuar-rozovoe-bryut-125",
+        "inkermanskiy-zmv-inkerman-bryut-rkatsiteli-beloe-12",
+        "novyy-svet-dom-shampanskih-vin-rossiyskoe-shampanskoe-kollektsionnoe-bryut-beloe-novyy-svet-zolotoy-risling-suhoe-13"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-brut-dor-riesling-risling-beloe-bryut-12",
+      "rank": 2,
+      "pred": "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-12",
+      "score1": 0.7765453457832336,
+      "margin": 0.00801706314086914,
+      "top5": [
+        "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-12",
+        "abrau-dyurso-brut-dor-riesling-risling-beloe-bryut-12",
+        "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-125",
+        "abrau-dyurso-brut-dor-rose-pino-nuar-rozovoe-bryut-12",
+        "abrau-dyurso-brut-dor-blanc-de-noirs-pino-nuar-beloe-bryut-125"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-brut-dor-riesling-risling-beloe-bryut-12",
+      "rank": 2,
+      "pred": "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-12",
+      "score1": 0.8187967538833618,
+      "margin": 0.0027367472648620605,
+      "top5": [
+        "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-12",
+        "abrau-dyurso-brut-dor-riesling-risling-beloe-bryut-12",
+        "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-125",
+        "abrau-dyurso-brut-dor-rose-pino-nuar-rozovoe-bryut-12",
+        "abrau-dyurso-brut-dor-blanc-de-noirs-pino-nuar-beloe-bryut-125"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-brut-dor-rose-pino-nuar-rozovoe-bryut-12",
+      "rank": 2,
+      "pred": "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-12",
+      "score1": 0.8104324340820312,
+      "margin": 0.00277024507522583,
+      "top5": [
+        "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-12",
+        "abrau-dyurso-brut-dor-rose-pino-nuar-rozovoe-bryut-12",
+        "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-125",
+        "abrau-dyurso-brut-dor-riesling-risling-beloe-bryut-12",
+        "abrau-dyurso-brut-dor-blanc-de-noirs-pino-nuar-beloe-bryut-115"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-femme-dabrau-amurskiy-potapenko-krasnoe-suhoe-107",
+      "rank": 8,
+      "pred": "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+      "score1": 0.7193043231964111,
+      "margin": 0.0036231279373168945,
+      "top5": [
+        "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+        "rozovoe-polusladkoe-2",
+        "fanagoriya-tochka-saperavi-krasnoe-suhoe-14",
+        "esse-rose-cuvee-prestige-pino-nuar-rozovoe-bryut-13",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-fizz-beloe-polusladkoe",
+      "rank": 11,
+      "pred": "rozovoe-polusladkoe-2",
+      "score1": 0.5987883806228638,
+      "margin": 0.007086694240570068,
+      "top5": [
+        "rozovoe-polusladkoe-2",
+        "abrau-dyurso-fizz-beloe-bryut",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "inkermanskiy-zmv-inkerman-bryut-shardone-beloe-135",
+        "fanagoriya-tochka-saperavi-krasnoe-suhoe-14"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-imperatorskoe-polusuhoe-shardone-beloe-12",
+      "rank": 4,
+      "pred": "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+      "score1": 0.8583343625068665,
+      "margin": 0.004908263683319092,
+      "top5": [
+        "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut",
+        "abrau-dyurso-imperatorskoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-imperatorskoe-polusuhoe-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-polusladkoe"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-imperatorskoe-polusuhoe-shardone-beloe-12",
+      "rank": 4,
+      "pred": "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut",
+      "score1": 0.8966377973556519,
+      "margin": 0.0011754035949707031,
+      "top5": [
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut",
+        "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+        "abrau-dyurso-imperatorskoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-imperatorskoe-polusuhoe-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-polusladkoe"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-imperial-brut-lart-nouveau-shardone-beloe-bryut-105",
+      "rank": 17,
+      "pred": "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut",
+      "score1": 0.7077456116676331,
+      "margin": 0.014683425426483154,
+      "top5": [
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut",
+        "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-polusladkoe",
+        "abrau-dyurso-pino-nuar-krasnoe-suhoe-12",
+        "abrau-dyurso-imperial-kyuve-pino-nuar-rozovoe-bryut-125"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-imperial-brut-lart-nouveau-shardone-beloe-bryut-105",
+      "rank": 4,
+      "pred": "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+      "score1": 0.8178074359893799,
+      "margin": 0.004162311553955078,
+      "top5": [
+        "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut",
+        "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-imperial-brut-lart-nouveau-shardone-beloe-bryut-105",
+        "abrau-dyurso-imperatorskoe-polusladkoe-shardone-beloe-12"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-imperial-brut-rose-pino-nuar-rozovoe-bryut-12",
+      "rank": 4,
+      "pred": "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+      "score1": 0.8133112788200378,
+      "margin": 0.003614962100982666,
+      "top5": [
+        "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut",
+        "abrau-dyurso-imperatorskoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-imperial-brut-rose-pino-nuar-rozovoe-bryut-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-polusladkoe"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-imperial-brut-rose-pino-nuar-rozovoe-bryut-12",
+      "rank": 4,
+      "pred": "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+      "score1": 0.7817642688751221,
+      "margin": 0.002793431282043457,
+      "top5": [
+        "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut",
+        "abrau-dyurso-imperatorskoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-imperial-brut-rose-pino-nuar-rozovoe-bryut-12",
+        "abrau-dyurso-imperatorskoe-polusuhoe-shardone-beloe-12"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-imperial-brut-vintage-shardone-beloe-bryut-12",
+      "rank": 8,
+      "pred": "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+      "score1": 0.8221431970596313,
+      "margin": 0.005956292152404785,
+      "top5": [
+        "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut",
+        "abrau-dyurso-imperatorskoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-polusladkoe"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-imperial-kyuve-pino-nuar-rozovoe-bryut-125",
+      "rank": 10,
+      "pred": "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+      "score1": 0.7934253215789795,
+      "margin": 0.002812504768371582,
+      "top5": [
+        "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut",
+        "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-imperatorskoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-polusladkoe"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-imperial-kyuve-pino-nuar-rozovoe-bryut-125",
+      "rank": 34,
+      "pred": "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+      "score1": 0.7408312559127808,
+      "margin": 0.0030783414840698242,
+      "top5": [
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "novyy-svet-dom-shampanskih-vin-rossiyskoe-shampanskoe-kollektsionnoe-bryut-beloe-novyy-svet-zolotoy-risling-suhoe-13",
+        "fanagoriya-tochka-saperavi-krasnoe-suhoe-14",
+        "abrau-dyurso-shardone-beloe-suhoe-13"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-kaberne-sovinon-krasnoe-suhoe-125",
+      "rank": 3,
+      "pred": "abrau-dyurso-pino-nuar-krasnoe-suhoe-125",
+      "score1": 0.7483931183815002,
+      "margin": 0.010183155536651611,
+      "top5": [
+        "abrau-dyurso-pino-nuar-krasnoe-suhoe-125",
+        "abrau-dyurso-abrau-dyurso-pino-nuar-krasnoe-suhoe-13",
+        "abrau-dyurso-kaberne-sovinon-krasnoe-suhoe-125",
+        "vinodelnya-vedernikov-vedernikov-gubernatorskoe-rezerv-kaberne-sovinon-krasnoe-suhoe-14",
+        "vinodelnya-begildeeva-kaberne-sovinon-krasnoe-suhoe-14"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-kaberne-sovinon-krasnoe-suhoe-125",
+      "rank": 2,
+      "pred": "abrau-dyurso-pino-nuar-krasnoe-suhoe-12",
+      "score1": 0.7327540516853333,
+      "margin": 0.0008147954940795898,
+      "top5": [
+        "abrau-dyurso-pino-nuar-krasnoe-suhoe-12",
+        "abrau-dyurso-kaberne-sovinon-krasnoe-suhoe-125",
+        "abrau-dyurso-pino-nuar-krasnoe-suhoe-125",
+        "abrau-dyurso-abrau-dyurso-pino-nuar-krasnoe-suhoe-13",
+        "vinodelnya-vedernikov-vedernikov-krasnostop-zolotovskiy-krasnoe-suhoe-145"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-pino-nuar-krasnoe-suhoe-12",
+      "rank": 2,
+      "pred": "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+      "score1": 0.718026876449585,
+      "margin": 0.0024907588958740234,
+      "top5": [
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "abrau-dyurso-pino-nuar-krasnoe-suhoe-12",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "fanagoriya-tochka-saperavi-krasnoe-suhoe-14",
+        "abrau-dyurso-abrau-dyurso-pino-nuar-krasnoe-suhoe-13"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-pino-nuar-krasnoe-suhoe-12",
+      "rank": 2,
+      "pred": "abrau-dyurso-pino-nuar-krasnoe-suhoe-125",
+      "score1": 0.7640637159347534,
+      "margin": 0.006955504417419434,
+      "top5": [
+        "abrau-dyurso-pino-nuar-krasnoe-suhoe-125",
+        "abrau-dyurso-pino-nuar-krasnoe-suhoe-12",
+        "abrau-dyurso-abrau-dyurso-pino-nuar-krasnoe-suhoe-13",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "abrau-dyurso-shardone-beloe-suhoe-13"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-pino-nuar-krasnoe-suhoe-125",
+      "rank": 2,
+      "pred": "abrau-dyurso-pino-nuar-krasnoe-suhoe-12",
+      "score1": 0.8516943454742432,
+      "margin": 0.010365962982177734,
+      "top5": [
+        "abrau-dyurso-pino-nuar-krasnoe-suhoe-12",
+        "abrau-dyurso-pino-nuar-krasnoe-suhoe-125",
+        "abrau-dyurso-abrau-dyurso-pino-nuar-krasnoe-suhoe-13",
+        "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-pino-nuar-krasnoe-suhoe-125",
+      "rank": 94,
+      "pred": "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+      "score1": 0.7732934355735779,
+      "margin": 0.018711090087890625,
+      "top5": [
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+        "rozovoe-polusladkoe-2",
+        "fanagoriya-tochka-saperavi-krasnoe-suhoe-14"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-risling-beloe-suhoe-12",
+      "rank": 21,
+      "pred": "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+      "score1": 0.7352801561355591,
+      "margin": 0.00040543079376220703,
+      "top5": [
+        "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "shardone-premium",
+        "esse-rkatsiteli-syur-li-beloe-suhoe-125"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-risling-beloe-suhoe-12",
+      "rank": 70,
+      "pred": "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+      "score1": 0.7607225179672241,
+      "margin": 0.0005721449851989746,
+      "top5": [
+        "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "esse-rkatsiteli-syur-li-beloe-suhoe-125",
+        "esse-risling-beloe-suhoe-115"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-risling-beloe-suhoe-13",
+      "rank": 22,
+      "pred": "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+      "score1": 0.7537118196487427,
+      "margin": 0.008988440036773682,
+      "top5": [
+        "nikolaev-i-synovya-festeliya-pti-verdo-krasnoe-suhoe-135",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "le-k2-vassal-risling-reynskiy-beloe-suhoe-14",
+        "rozovoe-polusladkoe-2",
+        "belmas-winery-risling-beloe-suhoe-135"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-russkoe-igristoe-koshernoe-bryut-shardone-beloe-13",
+      "rank": 10,
+      "pred": "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12",
+      "score1": 0.8368442058563232,
+      "margin": 0.007004499435424805,
+      "top5": [
+        "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut",
+        "abrau-dyurso-russkoe-igristoe-polusuhoe-shardone-beloe-12",
+        "abrau-dyurso-russkoe-igristoe-polusladkoe-krasnoe-kaberne-sovinon-12"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-russkoe-igristoe-koshernoe-bryut-shardone-beloe-13",
+      "rank": 6,
+      "pred": "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12",
+      "score1": 0.8162179589271545,
+      "margin": 0.0015433430671691895,
+      "top5": [
+        "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+        "abrau-dyurso-russkoe-igristoe-polusuhoe-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut",
+        "abrau-dyurso-russkoe-igristoe-polusladkoe-krasnoe-kaberne-sovinon-12"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-russkoe-igristoe-koshernoe-polusladkoe-shardone-beloe-12",
+      "rank": 50,
+      "pred": "inkermanskiy-zmv-inkerman-bryut-shardone-beloe-135",
+      "score1": 0.6265460252761841,
+      "margin": 0.020368576049804688,
+      "top5": [
+        "inkermanskiy-zmv-inkerman-bryut-shardone-beloe-135",
+        "abrau-dyurso-imperial-kyuve-pino-nuar-rozovoe-bryut-125",
+        "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-12",
+        "inkermanskiy-zmv-inkerman-bryut-rkatsiteli-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-russkoe-igristoe-koshernoe-polusladkoe-shardone-beloe-12",
+      "rank": 3,
+      "pred": "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12",
+      "score1": 0.8591628074645996,
+      "margin": 0.009676694869995117,
+      "top5": [
+        "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-russkoe-igristoe-polusuhoe-shardone-beloe-12",
+        "abrau-dyurso-russkoe-igristoe-koshernoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-imperatorskoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-polusladkoe"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-russkoe-igristoe-polusladkoe-krasnoe-kaberne-sovinon-12",
+      "rank": 2,
+      "pred": "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12",
+      "score1": 0.8583323955535889,
+      "margin": 0.00816333293914795,
+      "top5": [
+        "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-russkoe-igristoe-polusladkoe-krasnoe-kaberne-sovinon-12",
+        "abrau-dyurso-russkoe-igristoe-polusuhoe-shardone-beloe-12",
+        "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12",
+      "rank": 3,
+      "pred": "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut",
+      "score1": 0.7295806407928467,
+      "margin": 0.006787598133087158,
+      "top5": [
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut",
+        "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+        "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-abrau-durso-reserve-brut-shardone-beloe-bryut-115",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-polusladkoe"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12",
+      "rank": 42,
+      "pred": "avtorskij-gid-artura-sarkisyana",
+      "score1": 0.7247845530509949,
+      "margin": 0.014490664005279541,
+      "top5": [
+        "avtorskij-gid-artura-sarkisyana",
+        "esse-rose-cuvee-prestige-pino-nuar-rozovoe-bryut-13",
+        "abrau-dyurso-brut-dor-blanc-de-blancs-shardone-beloe-bryut-12",
+        "esse-brut-zero-dosage-shardone-beloe-ekstra-bryut-135",
+        "novyy-svet-dom-shampanskih-vin-novyy-svet-pino-nuar-rozovoe-bryut-13"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-russkoe-igristoe-polusuhoe-shardone-beloe-12",
+      "rank": 3,
+      "pred": "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut",
+      "score1": 0.7838923335075378,
+      "margin": 0.0028946399688720703,
+      "top5": [
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut",
+        "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-russkoe-igristoe-polusuhoe-shardone-beloe-12",
+        "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+        "abrau-dyurso-russkoe-igristoe-polusladkoe-krasnoe-kaberne-sovinon-12"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-russkoe-igristoe-polusuhoe-shardone-beloe-12",
+      "rank": 2,
+      "pred": "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12",
+      "score1": 0.8265010118484497,
+      "margin": 0.0044078826904296875,
+      "top5": [
+        "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12",
+        "abrau-dyurso-russkoe-igristoe-polusuhoe-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut",
+        "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+        "abrau-dyurso-russkoe-igristoe-polusladkoe-krasnoe-kaberne-sovinon-12"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-shardone-beloe-suhoe-12",
+      "rank": 6,
+      "pred": "abrau-dyurso-shardone-beloe-suhoe-13",
+      "score1": 0.7651814222335815,
+      "margin": 0.007521212100982666,
+      "top5": [
+        "abrau-dyurso-shardone-beloe-suhoe-13",
+        "abrau-dyurso-risling-beloe-suhoe-13",
+        "abrau-dyurso-abrau-dyurso-pino-nuar-krasnoe-suhoe-13",
+        "vaynkraft-traminer-traminer-rozovyy-beloe-suhoe-14",
+        "valeriy-zaharin-dom-zaharinyh-beloe-sary-pandas-suhoe-115"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-shardone-beloe-suhoe-12",
+      "rank": 3,
+      "pred": "abrau-dyurso-pino-nuar-krasnoe-suhoe-125",
+      "score1": 0.7936367988586426,
+      "margin": 0.004036664962768555,
+      "top5": [
+        "abrau-dyurso-pino-nuar-krasnoe-suhoe-125",
+        "abrau-dyurso-abrau-dyurso-pino-nuar-krasnoe-suhoe-13",
+        "abrau-dyurso-shardone-beloe-suhoe-12",
+        "abrau-dyurso-pino-nuar-krasnoe-suhoe-12",
+        "abrau-dyurso-russkoe-igristoe-polusladkoe-shardone-beloe-12"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-shardone-beloe-suhoe-13",
+      "rank": 2,
+      "pred": "abrau-dyurso-shardone-beloe-suhoe-12",
+      "score1": 0.8289535045623779,
+      "margin": 0.002154827117919922,
+      "top5": [
+        "abrau-dyurso-shardone-beloe-suhoe-12",
+        "abrau-dyurso-shardone-beloe-suhoe-13",
+        "abrau-dyurso-imperatorskoe-bryut-shardone-beloe-12",
+        "abrau-dyurso-udelnoe-vedomstvo-imperatorskoe-beloe-bryut",
+        "abrau-dyurso-pino-nuar-krasnoe-suhoe-12"
+      ]
+    },
+    {
+      "slug": "abrau-dyurso-spumante-bryut-roze-shardone-rozovoe-12",
+      "rank": 3,
+      "pred": "zolotaya-balka-pink-sira-rozovoe-suhoe-13",
+      "score1": 0.6263012886047363,
+      "margin": 0.0005977749824523926,
+      "top5": [
+        "zolotaya-balka-pink-sira-rozovoe-suhoe-13",
+        "esse-roze-kaberne-sovinon-rozovoe-suhoe-135",
+        "abrau-dyurso-spumante-bryut-roze-shardone-rozovoe-12",
+        "esse-rose-cuvee-prestige-pino-nuar-rozovoe-bryut-13",
+        "derbent-vino-graf-vorontsov-bryut-rozovoe-pervenets-magaracha-105-125"
+      ]
+    }
+  ]
+}

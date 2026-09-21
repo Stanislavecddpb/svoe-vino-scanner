@@ -13,10 +13,13 @@ CREATE TABLE IF NOT EXISTS wines (
 );
 
 -- Dimension is not fixed so the model can be swapped without a migration.
--- ~2k rows: exact scan is fast enough, no ANN index needed.
+-- view: 'full' (whole bottle) or a label-band crop ('label_mid', 'label_low');
+-- a wine's search score is the max over its views.
+-- ~6k rows: exact scan is fast enough, no ANN index needed.
 CREATE TABLE IF NOT EXISTS wine_embeddings (
   slug      text NOT NULL REFERENCES wines(slug) ON DELETE CASCADE,
   model     text NOT NULL,
+  view      text NOT NULL DEFAULT 'full',
   embedding vector NOT NULL,
-  PRIMARY KEY (slug, model)
+  PRIMARY KEY (slug, model, view)
 );

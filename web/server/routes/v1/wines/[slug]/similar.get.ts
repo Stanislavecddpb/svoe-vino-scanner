@@ -4,10 +4,10 @@ export default defineEventHandler(async (event) => {
   const limit = Math.min(Math.max(Number(getQuery(event).limit) || 8, 1), 24)
   try {
     const { rows } = await getPool().query(
-      `WITH me AS (SELECT embedding FROM wine_embeddings WHERE slug = $1 AND model = $2)
+      `WITH me AS (SELECT embedding FROM wine_embeddings WHERE slug = $1 AND model = $2 AND view = 'full')
        SELECT w.slug, w.name, w.winery, 1 - (e.embedding <=> me.embedding) AS score
          FROM wine_embeddings e JOIN wines w USING (slug), me
-        WHERE e.model = $2 AND e.slug <> $1
+        WHERE e.model = $2 AND e.view = 'full' AND e.slug <> $1
         ORDER BY e.embedding <=> me.embedding
         LIMIT $3`,
       [slug, appConfig.modelName, limit],

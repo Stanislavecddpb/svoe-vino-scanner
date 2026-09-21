@@ -17,6 +17,10 @@ export const appConfig = {
   get confidenceMargin() {
     return Number(process.env.CONFIDENCE_MARGIN ?? 0.03)
   },
+  /** search score = (1 - w) * whole bottle + w * best label crop */
+  get labelWeight() {
+    return Number(process.env.LABEL_WEIGHT ?? 0.5)
+  },
   get notFoundScore() {
     return Number(process.env.NOT_FOUND_SCORE ?? 0.72)
   },

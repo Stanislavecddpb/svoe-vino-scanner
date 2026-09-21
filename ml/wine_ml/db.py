@@ -38,27 +38,29 @@ def delete_wines_not_in(conn: psycopg.Connection, slugs: list[str]) -> int:
     return n
 
 
-def indexed_slugs(conn: psycopg.Connection, model: str) -> set[str]:
+def indexed_slugs(conn: psycopg.Connection, model: str, view: str = "full") -> set[str]:
     with conn.cursor() as cur:
-        cur.execute("SELECT slug FROM wine_embeddings WHERE model = %s", (model,))
+        cur.execute("SELECT slug FROM wine_embeddings WHERE model = %s AND view = %s", (model, view))
         return {r[0] for r in cur.fetchall()}
 
 
 def upsert_embeddings(conn: psycopg.Connection, model: str, slugs: list[str],
-                      vectors: np.ndarray) -> None:
+                      vectors: np.ndarray, view: str = "full") -> None:
     with conn.cursor() as cur:
         cur.executemany(
-            "INSERT INTO wine_embeddings (slug, model, embedding) VALUES (%s, %s, %s) "
-            "ON CONFLICT (slug, model) DO UPDATE SET embedding = EXCLUDED.embedding",
-            [(s, model, v) for s, v in zip(slugs, vectors)],
+            "INSERT INTO wine_embeddings (slug, model, view, embedding) VALUES (%s, %s, %s, %s) "
+            "ON CONFLICT (slug, model, view) DO UPDATE SET embedding = EXCLUDED.embedding",
+            [(s, model, view, v) for s, v in zip(slugs, vectors)],
         )
     conn.commit()
 
 
-def fetch_embeddings(conn: psycopg.Connection, model: str) -> tuple[list[str], np.ndarray]:
+def fetch_embeddings(conn: psycopg.Connection, model: str,
+                     views: tuple[str, ...] | list[str] = ("full",)) -> tuple[list[str], np.ndarray]:
+    """One row per (slug, view) for the requested views; slugs repeat across views."""
     with conn.cursor() as cur:
-        cur.execute("SELECT slug, embedding FROM wine_embeddings WHERE model = %s ORDER BY slug",
-                    (model,))
+        cur.execute("SELECT slug, embedding FROM wine_embeddings "
+                    "WHERE model = %s AND view = ANY(%s) ORDER BY slug, view", (model, list(views)))
         rows = cur.fetchall()
     if not rows:
         return [], np.zeros((0, 0), np.float32)

@@ -80,6 +80,7 @@ docker compose -f docker-compose.yml -f docker-compose.gpu.yml --profile full up
 | `DEVICE` | `auto` | ml | `auto` / `cuda` / `cpu` |
 | `CONFIDENCE_MARGIN` | `0.03` | web | порог отрыва для `confident` |
 | `NOT_FOUND_SCORE` | `0.72` | web | ниже этого score₁ — «нет в каталоге» |
+| `LABEL_WEIGHT` | `0.5` | web | score вина = (1 − w)·бутылка + w·лучшая зона этикетки |
 | `ML_TIMEOUT_MS` | `8000` | web | таймаут запроса к ml |
 | `CATALOG_IMAGES_DIR` | `../data/catalog/images` | web | фото каталога |
 | `HF_HUB_OFFLINE` | — | ml | `1` — не ходить в сеть за моделью (после первой загрузки) |
@@ -90,11 +91,17 @@ docker compose -f docker-compose.yml -f docker-compose.gpu.yml --profile full up
 из 2103 slug в CSV — 1964 в индексе; исключено 26 (одно фото на несколько slug), 67 (файл фото не найден в выгрузке Strapi),
 46 (имя фото соответствует нескольким разным файлам). Список с причинами — `data/catalog/excluded.csv`.
 
+**Двойники** (`ml/scripts/find_twins.py` → `data/catalog/twins.csv`): 67 вин в 33 группах, у которых эталонное фото совпадает с фото другого вина (косинус ≥ 0.99) — одно изображение на разные вина или одно вино, заведённое дважды. По изображению они неразличимы: остаются в индексе, но в оценке считаются отдельно.
+
+**Индекс**: на каждое вино 3 вектора — бутылка целиком (`full`) и две зоны этикетки (`label_mid`, `label_low`); score вина = 0.5 · сходство с бутылкой + 0.5 · лучшее сходство с зоной этикетки (`LABEL_WEIGHT`). Базу, созданную раньше, обновляет `db/migrations/002_views.sql` (`setup.ps1` применяет её сам).
+
 ## Оценка
 
 ```powershell
-# синтетика: «полевые» копии эталонов, Top-1/Top-5, near-duplicates отдельно
-ml\.venv\Scripts\python ml\scripts\evaluate.py --n-aug 2
+# синтетика: «полевые» копии эталонов, Top-1/Top-5, near-duplicates и двойники отдельно
+ml\.venv\Scripts\python ml\scripts\evaluate.py --tag multiview
+# только вид full — сравнение с baseline на тех же запросах (эмбеддинги запросов кэшируются)
+ml\.venv\Scripts\python ml\scripts\evaluate.py --views full --tag baseline
 # реальные размеченные фото (TSV: image_path<TAB>slug)
 ml\.venv\Scripts\python ml\scripts\evaluate.py --labels labels.tsv --images-dir photos
 # глазами: каждое фото + Top-5 эталонов (нужен запущенный сервис)

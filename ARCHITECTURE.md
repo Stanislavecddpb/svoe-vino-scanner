@@ -23,7 +23,7 @@ ml — FastAPI, :8001                                  Postgres 16 + pgvector
 |---|---|---|
 | Нормализация фото | `ml/wine_ml/preprocess.py` | EXIF-поворот → RGB, прозрачность → белый → обрезка белых полей → уменьшение до 1024 → паддинг до квадрата. Одна функция для эталонов, запросов и оценки, чтобы векторы были сопоставимы. |
 | Извлечение признаков | `ml/wine_ml/embedder.py` | SigLIP 2 (`google/siglip2-so400m-patch14-384`, 1152-d), fp16 на GPU, L2-нормировка. |
-| Поиск по каталогу | `web/server/utils/engine/vector.ts` | косинусное расстояние `<=>` в pgvector, точный перебор (≈2k векторов, <5 мс), Top-5. |
+| Поиск по каталогу | `web/server/utils/engine/vector.ts` | косинусное расстояние `<=>` в pgvector по всем видам вина (бутылка + 2 зоны этикетки, `ml/wine_ml/views.py`); score вина = (1 − w)·бутылка + w·лучшая зона этикетки, w = `LABEL_WEIGHT` (0.5); точный перебор (≈6k векторов), Top-5. |
 | Выдача карточки | `web/server/routes/v1/wines/[slug]/`, `web/pages/wine/[slug].vue` | карточка вина из таблицы `wines` + фото каталога. |
 | Уверенность | `web/server/utils/search.ts`, `status.ts` | `score` = косинусное сходство; `margin` = score₁ − score₂; `status` = `confident` / `uncertain` / `not_found` по порогам `CONFIDENCE_MARGIN` и `NOT_FOUND_SCORE`. |
 | Доп. функционал | — | следующий этап (сомелье, аналоги) — строится поверх `/v1/search` и `/v1/wines`. |
@@ -55,6 +55,10 @@ data/raw/strapi_output0709.csv + data/raw/strapi/.../uploads
 ```
 
 **Однозначная позиция**: фото в CSV принадлежит ровно одному slug И имя фото сопоставляется ровно с одним файлом в uploads (или несколькими побайтно одинаковыми). Сопоставление: у файла Strapi отрезается `_<hash10>`, обе стороны приводятся к ключу (lowercase, транслитерация кириллицы, только `[a-z0-9]`). Исключённые позиции с причиной — в `data/catalog/excluded.csv` (`shared_photo`, `file_not_found`, `ambiguous_file`, `unreadable_image`).
+
+`wine_embeddings` хранит модель и вид (`full`, `label_mid`, `label_low`) в ключе. «Похожие вина» и поиск двойников используют только `full`.
+
+**Двойники** (`ml/wine_ml/twins.py`): разные вина с одинаковым эталоном (косинус `full` ≥ 0.99), связные компоненты; остаются в индексе, но исключаются из основной метрики.
 
 `wine_embeddings` хранит модель в ключе — можно держать индексы нескольких моделей и переключаться `MODEL_NAME` без миграции.
 

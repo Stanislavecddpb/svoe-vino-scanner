@@ -37,6 +37,7 @@ Push-Location web; npm ci; Check; Pop-Location
 
 Step "Postgres + pgvector (docker)"
 docker compose up -d --wait db; Check
+Get-Content db\migrations\002_views.sql | docker compose exec -T db psql -q -U wine; Check   # no-op on a fresh DB
 
 Step "Catalog: unambiguous positions"
 & $py ml\scripts\build_catalog.py; Check
@@ -45,6 +46,7 @@ Step "Catalog: unambiguous positions"
 Step "Index: SigLIP 2 embeddings -> pgvector (first run downloads the model, ~4.5 GB)"
 $env:MODEL_NAME = $Model
 if ($Cpu) { $env:DEVICE = "cpu" }
-& $py ml\scripts\build_index.py; Check
+& $py ml\scripts\build_index.py; Check   # views: full + label_mid + label_low
+& $py ml\scripts\find_twins.py; Check    # data/catalog/twins.csv
 
 Write-Host "`nDone. Start the service: .\scripts\dev.ps1" -ForegroundColor Green

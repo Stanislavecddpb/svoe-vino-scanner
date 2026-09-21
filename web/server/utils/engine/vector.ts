@@ -32,12 +32,24 @@ export class VectorEngine implements RecognitionEngine {
     const literal = `[${(await this.embed(image)).join(',')}]`
     try {
       const { rows } = await getPool().query(
-        `SELECT w.slug, w.name, w.winery, 1 - (e.embedding <=> $1::vector) AS score
-           FROM wine_embeddings e JOIN wines w USING (slug)
-          WHERE e.model = $2
-          ORDER BY e.embedding <=> $1::vector
+        // a wine's score = (1 - w) * whole-bottle match + w * best label-crop match
+        // (whole bottle only if the wine has no label views); same formula as ml/scripts/evaluate.py
+        `SELECT w.slug, w.name, w.winery, v.score
+           FROM (SELECT slug,
+                        CASE WHEN max(sim) FILTER (WHERE view <> 'full') IS NULL
+                             THEN max(sim) FILTER (WHERE view = 'full')
+                             ELSE (1 - $4::float8) * max(sim) FILTER (WHERE view = 'full')
+                                  + $4::float8 * max(sim) FILTER (WHERE view <> 'full')
+                        END AS score
+                   FROM (SELECT slug, view, 1 - (embedding <=> $1::vector) AS sim
+                           FROM wine_embeddings
+                          WHERE model = $2) e
+                  GROUP BY slug) v
+           JOIN wines w USING (slug)
+          WHERE v.score IS NOT NULL
+          ORDER BY v.score DESC
           LIMIT $3`,
-        [literal, this.model, k],
+        [literal, this.model, k, appConfig.labelWeight],
       )
       return rows.map(r => ({ slug: r.slug, name: r.name, winery: r.winery, score: Number(Number(r.score).toFixed(4)) }))
     }

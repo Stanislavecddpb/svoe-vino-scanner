@@ -43,6 +43,7 @@ services:
       MODEL_NAME: ${MODEL_NAME:-google/siglip2-so400m-patch14-384}
       CONFIDENCE_MARGIN: ${CONFIDENCE_MARGIN:-0.03}
       NOT_FOUND_SCORE: ${NOT_FOUND_SCORE:-0.72}
+      LABEL_WEIGHT: ${LABEL_WEIGHT:-0.5}
       CATALOG_IMAGES_DIR: /data/catalog/images
     ports:
       - "8080:8080"
