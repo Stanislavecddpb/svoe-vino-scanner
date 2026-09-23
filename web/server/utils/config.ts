@@ -29,7 +29,7 @@ export const appConfig = {
     return Number(process.env.RERANK_K ?? 10)
   },
   get notFoundScore() {
-    return Number(process.env.NOT_FOUND_SCORE ?? 0.72)
+    return Number(process.env.NOT_FOUND_SCORE ?? 0.75)
   },
   get mlTimeoutMs() {
     return Number(process.env.ML_TIMEOUT_MS ?? 8000)

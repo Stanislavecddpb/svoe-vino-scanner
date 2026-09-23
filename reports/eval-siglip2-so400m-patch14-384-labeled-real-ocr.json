@@ -1,0 +1,221 @@
+{
+  "date": "2026-09-23T14:08:41",
+  "model": "google/siglip2-so400m-patch14-384",
+  "views": [
+    "full",
+    "label_mid",
+    "label_low"
+  ],
+  "mode": "labeled, OCR rerank top-10 a=0.1 b=0.05",
+  "index_wines": 2076,
+  "near_duplicate_refs": 1053,
+  "twin_refs": 93,
+  "margin_threshold": 0.03,
+  "embed_ms_per_image": 2251.8,
+  "not_found_threshold": 0.72,
+  "metrics": {
+    "all_in_catalog": {
+      "n": 64,
+      "top1": 0.8438,
+      "top5": 0.9844,
+      "top10": 0.9844,
+      "mean_margin_correct": 0.0645,
+      "mean_top1_score": 0.8084,
+      "confident_share": 0.5781,
+      "confident_top1": 1.0
+    },
+    "all_without_twins": {
+      "n": 64,
+      "top1": 0.8438,
+      "top5": 0.9844,
+      "top10": 0.9844,
+      "mean_margin_correct": 0.0645,
+      "mean_top1_score": 0.8084,
+      "confident_share": 0.5781,
+      "confident_top1": 1.0
+    },
+    "near_duplicates": {
+      "n": 36,
+      "top1": 0.8611,
+      "top5": 1.0,
+      "top10": 1.0,
+      "mean_margin_correct": 0.0515,
+      "mean_top1_score": 0.8251,
+      "confident_share": 0.5,
+      "confident_top1": 1.0
+    },
+    "distinct": {
+      "n": 28,
+      "top1": 0.8214,
+      "top5": 0.9643,
+      "top10": 0.9643,
+      "mean_margin_correct": 0.0821,
+      "mean_top1_score": 0.7869,
+      "confident_share": 0.6786,
+      "confident_top1": 1.0
+    },
+    "twins": {
+      "n": 0
+    }
+  },
+  "service": {
+    "in_catalog_n": 64,
+    "in_catalog_correct_card": 0.8281,
+    "in_catalog_false_not_found": 0.0312,
+    "top1_any_status": 0.8438,
+    "outside_n": 33,
+    "outside_not_found": 0.3939
+  },
+  "errors_sample": [
+    {
+      "slug": "fanagoriya-velvet-season-muskat-ottonel-beloe-sladkoe-13",
+      "rank": 2,
+      "pred": "fanagoriya-velvet-season-risling-beloe-sladkoe-12",
+      "score1": 0.6620018482208252,
+      "margin": 0.008600000000000052,
+      "top5": [
+        "fanagoriya-velvet-season-risling-beloe-sladkoe-12",
+        "fanagoriya-velvet-season-muskat-ottonel-beloe-sladkoe-13",
+        "soyuz-vino-soyuz-vino-muskat-beloe-polusladkoe-11",
+        "fanagoriya-ledyanoe-vino-muskat-muskat-ottonel-beloe-sladkoe-11",
+        "agora-muskat"
+      ],
+      "not_found": true
+    },
+    {
+      "slug": "fanagoriya-formula-q-kaberne-sovinon-krasnoe-suhoe-135",
+      "rank": 2,
+      "pred": "fanagoriya-formula-q-saperavi-krasnoe-suhoe-135",
+      "score1": 0.8180748820304871,
+      "margin": 0.005400000000000071,
+      "top5": [
+        "fanagoriya-formula-q-saperavi-krasnoe-suhoe-135",
+        "fanagoriya-formula-q-kaberne-sovinon-krasnoe-suhoe-135",
+        "fanagoriya-q-bordeaux-blend-kaberne-sovinon-krasnoe-suhoe-135",
+        "fanagoriya-q-blanc-sovinon-blan-beloe-suhoe-14",
+        "fanagoriya-fanagoriya-sakra-sennoy-krasnostop-krasnoe-suhoe-135"
+      ],
+      "not_found": false
+    },
+    {
+      "slug": "zhemchuzhnaya-9-aligote-czitron",
+      "rank": 2077,
+      "pred": "zhemchuzhnaya-9-czitron-shardone-1",
+      "score1": 0.781866729259491,
+      "margin": 0.028200000000000003,
+      "top5": [
+        "zhemchuzhnaya-9-czitron-shardone-1",
+        "czitronnyj-magaracha-sovinon-blan",
+        "zhemchuzhnaya-9-sovinon-blan-aligote",
+        "vinodelnya-uzunov-aligote-beloe-suhoe-127",
+        "zhemchuzhnaya-9-risling-sovinon-blan"
+      ],
+      "not_found": false
+    },
+    {
+      "slug": "merlo-litavshhuk",
+      "rank": 3,
+      "pred": "vinodelnya-begildeeva-merlo-krasnoe-suhoe-14",
+      "score1": 0.7911301851272583,
+      "margin": 0.012699999999999934,
+      "top5": [
+        "vinodelnya-begildeeva-merlo-krasnoe-suhoe-14",
+        "vinodelnya-begildeeva-kaberne-sovinon-merlo-krasnoe-suhoe-14",
+        "merlo-litavshhuk",
+        "usadba-mezyb-mezyb-merlo-krasnoe-suhoe-145",
+        "vinnyy-kooperativ-intuitsiya-kaberne-sovinon-merlo-saperavi-krasnoe-suhoe-128"
+      ],
+      "not_found": false
+    },
+    {
+      "slug": "rubin-golodrigi",
+      "rank": 2,
+      "pred": "kaberne-sovinon-2",
+      "score1": 0.7863588333129883,
+      "margin": 0.0027000000000000357,
+      "top5": [
+        "kaberne-sovinon-2",
+        "rubin-golodrigi",
+        "bukovinka",
+        "roze-2",
+        "pobeda"
+      ],
+      "not_found": false
+    },
+    {
+      "slug": "novyy-svet-dom-shampanskih-vin-rossiyskoe-shampanskoe-vyderzhannoe-polusladkoe-rozovoe-novyy-svet-shardone-125",
+      "rank": 3,
+      "pred": "novyj-svet-polusladkoe",
+      "score1": 0.8257612586021423,
+      "margin": 0.0030999999999999917,
+      "top5": [
+        "novyj-svet-polusladkoe",
+        "novyy-svet-dom-shampanskih-vin-novyy-svet-polusladkoe-roze-shardone-rozovoe-115",
+        "novyy-svet-dom-shampanskih-vin-rossiyskoe-shampanskoe-vyderzhannoe-polusladkoe-rozovoe-novyy-svet-shardone-125",
+        "novyy-svet-dom-shampanskih-vin-igristoe-vino-vyderzhannoe-polusladkoe-krasnoe-novyy-svet-kaberne-sovinon-12",
+        "novyj-svet-kaberne-sovinon"
+      ],
+      "not_found": false
+    },
+    {
+      "slug": "pozdnij-sbor-krasnoe",
+      "rank": 2,
+      "pred": "pozdnij-sbor-beloe",
+      "score1": 0.7817831039428711,
+      "margin": 0.011800000000000033,
+      "top5": [
+        "pozdnij-sbor-beloe",
+        "pozdnij-sbor-krasnoe",
+        "saperavi-premium",
+        "merlo-litavshhuk",
+        "vintazh-premium"
+      ],
+      "not_found": false
+    },
+    {
+      "slug": "golubitskoe-estate-red-blend-kaberne-sovinon-krasnoe-suhoe-136",
+      "rank": 2,
+      "pred": "golubitskoe-estate-winery-series-roze-blend-kaberne-sovinon-rozovoe-suhoe-117",
+      "score1": 0.7749431133270264,
+      "margin": 0.01880000000000004,
+      "top5": [
+        "golubitskoe-estate-winery-series-roze-blend-kaberne-sovinon-rozovoe-suhoe-117",
+        "golubitskoe-estate-red-blend-kaberne-sovinon-krasnoe-suhoe-136",
+        "golubitskoe-estate-winery-series-pino-nuar-rozovoe-suhoe-115",
+        "golubitskoe-rose",
+        "golubitskoe-estate-noble-selection-red-blend-kaberne-sovinon-krasnoe-suhoe-136"
+      ],
+      "not_found": false
+    },
+    {
+      "slug": "vinodelnya-vedernikov-vedernikov-dolina-dona-beloe-suhoe-aligote-12",
+      "rank": 3,
+      "pred": "vinodelnya-vedernikov-sibirkovyy-beloe-suhoe-11",
+      "score1": 0.8108401298522949,
+      "margin": 0.0039000000000000146,
+      "top5": [
+        "vinodelnya-vedernikov-sibirkovyy-beloe-suhoe-11",
+        "vinodelnya-vedernikov-vedernikov-dolina-dona-krasnoe-suhoe-kaberne-sovinon-125",
+        "vinodelnya-vedernikov-vedernikov-dolina-dona-beloe-suhoe-aligote-12",
+        "vinodelnya-vedernikov-vedernikov-gubernatorskoe-golubok-krasnoe-suhoe-115",
+        "vinodelnya-vedernikov-rkatsiteli-beloe-suhoe-13"
+      ],
+      "not_found": false
+    },
+    {
+      "slug": "oleg",
+      "rank": 5,
+      "pred": "roze-2",
+      "score1": 0.7834565043449402,
+      "margin": 0.02859999999999996,
+      "top5": [
+        "roze-2",
+        "rozovoe-zoloto",
+        "bukovinka",
+        "kaberne-sovinon-2",
+        "oleg"
+      ],
+      "not_found": false
+    }
+  ]
+}

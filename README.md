@@ -79,7 +79,7 @@ docker compose -f docker-compose.yml -f docker-compose.gpu.yml --profile full up
 | `MODEL_NAME` | `google/siglip2-so400m-patch14-384` | web, ml | модель; web ищет только по векторам этой модели |
 | `DEVICE` | `auto` | ml | `auto` / `cuda` / `cpu` |
 | `CONFIDENCE_MARGIN` | `0.03` | web | порог отрыва для `confident` |
-| `NOT_FOUND_SCORE` | `0.72` | web | ниже этого score₁ — «нет в каталоге» |
+| `NOT_FOUND_SCORE` | `0.75` | web | лучший визуальный скор ниже — «нет в каталоге» (подобран на реальных фото: чётные — подбор, нечётные — проверка) |
 | `LABEL_WEIGHT` | `0.5` | web | score вина = (1 − w)·бутылка + w·лучшая зона этикетки |
 | `OCR_ENABLED` | `1` | web, ml | OCR-переранжирование Top-K по тексту этикетки (`0` — только картинка) |
 | `RERANK_K` | `10` | web | сколько визуальных кандидатов переранжировать |

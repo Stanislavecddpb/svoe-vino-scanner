@@ -32,6 +32,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import random
 import time
@@ -84,16 +85,17 @@ def load_queries(args, wines_in_index: list[str]) -> list[tuple[str, callable]]:
 
 
 def embed_queries(args, queries) -> tuple[np.ndarray, float]:
-    """Query embeddings (cached for synthetic mode) and embed ms/image."""
-    cache = None
-    if not args.labels:
+    """Query embeddings (cached; the cache is reused only for the same query list) and embed ms/image."""
+    if args.labels:
+        cache = args.out / "cache" / f"q-{args.model.split('/')[-1]}-labels-{args.labels.stem}.npz"
+    else:
         cache = args.out / "cache" / (f"q-{args.model.split('/')[-1]}-seed{args.seed}"
                                       f"-n{args.n_aug}-limit{args.limit}{'-hires' if args.hires else ''}.npz")
-        if cache.exists():
-            z = np.load(cache, allow_pickle=False)
-            if list(z["slugs"]) == [s for s, _ in queries]:
-                print(f"query embeddings from cache: {cache}")
-                return z["emb"], float(z["embed_ms"])
+    if cache.exists():
+        z = np.load(cache, allow_pickle=False)
+        if list(z["slugs"]) == [s for s, _ in queries]:
+            print(f"query embeddings from cache: {cache}")
+            return z["emb"], float(z["embed_ms"])
 
     from wine_ml.embedder import Embedder
 
@@ -128,15 +130,16 @@ def combine_views(per_view: dict[str, np.ndarray], label_weight: float) -> np.nd
 
 
 def ocr_queries(args, queries) -> list[list[dict]]:
-    """OCR items per query (cached for synthetic mode); images are regenerated deterministically."""
-    cache = None
-    if not args.labels:
+    """OCR items per query (cached; synthetic images are regenerated deterministically)."""
+    if args.labels:
+        cache = args.out / "cache" / f"ocr-{OCR_PROVIDER}-labels-{args.labels.stem}.json"
+    else:
         cache = args.out / "cache" / f"ocr-{OCR_PROVIDER}-seed{args.seed}-n{args.n_aug}-limit{args.limit}{'-hires' if args.hires else ''}.json"
-        if cache.exists():
-            z = json.loads(cache.read_text(encoding="utf-8"))
-            if z["slugs"] == [s for s, _ in queries]:
-                print(f"OCR from cache: {cache}")
-                return z["ocr"]
+    if cache.exists():
+        z = json.loads(cache.read_text(encoding="utf-8"))
+        if z["slugs"] == [s for s, _ in queries]:
+            print(f"OCR from cache: {cache}")
+            return z["ocr"]
 
     engine = make_ocr_engine(args.device)
     t0 = time.perf_counter()
@@ -163,7 +166,9 @@ def rank_rows(queries, scores: np.ndarray, wines: list[str], catalog: dict, ocr:
             rr = rerank(ocr[qi], cands, alpha, beta)
             ranked = [c["slug"] for c in rr] + ranked[k:]
             final = [rr[0]["final"], rr[1]["final"]]
-        rank = ranked.index(slug) + 1 if slug in pos else len(wines) + 1
+        # a label may list catalog duplicates of one wine ("a|b"): any of them counts
+        hits = [ranked.index(a) + 1 for a in slug.split("|") if a in pos]
+        rank = min(hits) if hits else len(wines) + 1
         rows.append({"slug": slug, "rank": rank, "pred": ranked[0], "score1": float(sc[od[0]]),
                      "margin": final[0] - final[1], "top5": ranked[:5]})
     return rows
@@ -206,8 +211,9 @@ def main() -> None:
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--batch", type=int, default=16)
     ap.add_argument("--margin", type=float, default=0.03, help="confidence margin threshold")
-    ap.add_argument("--not-found", type=float, default=0.72, help="best visual score below this = 'not in catalog' (web NOT_FOUND_SCORE)")
+    ap.add_argument("--not-found", type=float, default=0.75, help="best visual score below this = 'not in catalog' (web NOT_FOUND_SCORE)")
     ap.add_argument("--labels", type=Path)
+    ap.add_argument("--csv", type=Path, default=Path("data/raw/strapi_output0709.csv"), help="catalog dump (to validate labels)")
     ap.add_argument("--images-dir", type=Path, default=Path("."))
     ap.add_argument("--tag", default="", help="suffix for report file names")
     ap.add_argument("--out", type=Path, default=Path("reports"))
@@ -232,10 +238,18 @@ def main() -> None:
 
     queries = load_queries(args, full_slugs)
     wine_set = set(full_slugs)
-    unknown = sorted({s for s, _ in queries if s not in wine_set and s != NOT_IN_CATALOG})
-    if unknown:  # typo in labels, or a wine excluded from the index (ambiguous photo mapping)
-        print(f"skipping {len(unknown)} labels not in the index: {unknown[:10]}")
-    queries = [(s, f) for s, f in queries if s in wine_set or s == NOT_IN_CATALOG]
+    with args.csv.open(encoding="utf-8-sig", newline="") as f:
+        csv_slugs = {r["Slug"].strip() for r in csv.DictReader(f)}
+    alts = lambda s: s.split("|")  # noqa: E731
+    typos = sorted({s for s, _ in queries if s != NOT_IN_CATALOG and not all(a in csv_slugs for a in alts(s))})
+    if typos:
+        print(f"skipping {len(typos)} labels that are not catalog slugs: {typos[:10]}")
+    queries = [(s, f) for s, f in queries if s not in typos]
+    unindexed = sorted({s for s, _ in queries if s != NOT_IN_CATALOG and not any(a in wine_set for a in alts(s))})
+    if unindexed:  # in the catalog, but its photo could not be mapped: the service cannot find it -> a miss
+        print(f"{len(unindexed)} labeled wines are in the catalog but not in the index (counted as misses): {unindexed}")
+    twins = {s for s, _ in queries if any(a in twins for a in alts(s))} | twins
+    hard = {s for s, _ in queries if any(a in hard for a in alts(s))} | hard
     print(f"index: {len(wine_set)} wines x views {views}, label weight {args.label_weight}; "
           f"near-duplicates: {len(hard)}, twins: {len(twins)}; queries: {len(queries)}")
 
@@ -261,15 +275,18 @@ def main() -> None:
     outside = [r for r in rows if r["slug"] == NOT_IN_CATALOG]
     rows = [r for r in rows if r["slug"] != NOT_IN_CATALOG]
     clean = [r for r in rows if r["slug"] not in twins]
-    answer_ok = [r["rank"] == 1 and not r["not_found"] for r in clean]
+    base = rows if args.labels else clean  # real photos: every labeled wine counts
+    answer_ok = [r["rank"] == 1 and not r["not_found"] for r in base]
     service = {  # what the user actually sees: the right card, or an honest "not in catalog"
-        "in_catalog_n": len(clean),
-        "in_catalog_correct_card": round(float(np.mean(answer_ok)), 4) if clean else None,
-        "in_catalog_false_not_found": round(float(np.mean([r["not_found"] for r in clean])), 4) if clean else None,
+        "in_catalog_n": len(base),
+        "in_catalog_correct_card": round(float(np.mean(answer_ok)), 4) if base else None,
+        "in_catalog_false_not_found": round(float(np.mean([r["not_found"] for r in base])), 4) if base else None,
+        "top1_any_status": round(float(np.mean([r["rank"] == 1 for r in base])), 4) if base else None,
         "outside_n": len(outside),
         "outside_not_found": round(float(np.mean([r["not_found"] for r in outside])), 4) if outside else None,
     }
     metrics = {
+        **({"all_in_catalog": summarize(rows, args.margin)} if args.labels else {}),
         "all_without_twins": summarize(clean, args.margin),
         "near_duplicates": summarize([r for r in clean if r["slug"] in hard], args.margin),
         "distinct": summarize([r for r in clean if r["slug"] not in hard], args.margin),
