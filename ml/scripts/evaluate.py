@@ -62,7 +62,9 @@ def load_queries(args, wines_in_index: list[str]) -> list[tuple[str, callable]]:
             parts = line.rstrip("\r").split("\t")
             if len(parts) < 2 or parts[0] in ("image_path", "query_id"):
                 continue
-            path, slug = parts[0], parts[-1]
+            path, slug = parts[0], parts[-1].strip()
+            if slug in ("", "?"):  # skipped while labeling ("не понятно")
+                continue
             out.append((slug, lambda p=args.images_dir / path: Image.open(p)))
         return out
 
