@@ -1,5 +1,7 @@
 """CSV dump + Strapi uploads -> data/catalog/{wines.jsonl, excluded.csv, images/}.
 
+Each wine records how its photo was found (``mapping``, see wine_ml/catalog.py).
+
 Usage:
   python ml/scripts/build_catalog.py \
       --csv data/raw/strapi_output0709.csv \
@@ -45,7 +47,9 @@ def main() -> None:
             excluded.append({"slug": w["slug"], "photo": src.name, "reason": "unreadable_image"})
             continue
         dst = images_dir / f"{w['slug']}{src.suffix.lower()}"
-        if not dst.exists():
+        if not dst.exists() or dst.stat().st_size != src.stat().st_size or dst.read_bytes() != src.read_bytes():
+            for stale in images_dir.glob(f"{w['slug']}.*"):  # the source file changed: drop the old copy
+                stale.unlink()
             shutil.copy2(src, dst)
         w["image_file"] = dst.name
         w["source_upload"] = src.name
@@ -62,6 +66,7 @@ def main() -> None:
     print(f"csv rows: {len(rows)}, unique slugs: {len(kept) + len(excluded)}")
     print(f"kept: {len(kept)}")
     print("excluded:", dict(Counter(e["reason"] for e in excluded)))
+    print("mapping:", dict(Counter(w["mapping"] for w in kept)))
 
 
 if __name__ == "__main__":
