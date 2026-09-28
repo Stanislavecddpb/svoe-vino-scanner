@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Wine, WineShort } from '~/types/api'
+import type { Analog, Wine, WineShort } from '~/types/api'
 
 // Wine card in the vino-svoe.ru style + recognition alternatives + similar wines.
 const route = useRoute()
@@ -7,6 +7,7 @@ const slug = computed(() => String(route.params.slug))
 const scan = useScan()
 
 const { data: wine, error } = await useFetch<Wine>(() => `/v1/wines/${encodeURIComponent(slug.value)}`)
+const { data: analogs } = await useFetch<Analog[]>(() => `/v1/wines/${encodeURIComponent(slug.value)}/analogs?limit=6`, { default: () => [] })
 const { data: similar } = await useFetch<WineShort[]>(() => `/v1/wines/${encodeURIComponent(slug.value)}/similar?limit=8`, { default: () => [] })
 
 useHead(() => ({ title: wine.value ? `${wine.value.name} — Своё вино` : 'Вино — Своё вино' }))
@@ -80,6 +81,12 @@ const specs = computed(() => {
         </div>
       </section>
 
+      <section v-if="analogs?.length">
+        <h2 class="section-title">Аналоги из других виноделен</h2>
+        <p class="muted section-hint">Тот же стиль у других производителей — если этого вина нет на полке</p>
+        <WineGrid :wines="analogs" />
+      </section>
+
       <section v-if="similar?.length">
         <h2 class="section-title">Похожие вина</h2>
         <WineGrid :wines="similar" />
@@ -119,4 +126,5 @@ const specs = computed(() => {
 .alts__body { padding-bottom: 16px; }
 .alts__photo { width: 96px; height: 128px; object-fit: cover; border-radius: var(--radius-s); margin-bottom: 12px; }
 .again { margin-top: 32px; }
+.section-hint { font-size: 14px; margin: -6px 0 12px; }
 </style>

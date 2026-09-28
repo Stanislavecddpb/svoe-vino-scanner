@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { WineShort } from '~/types/api'
 
-// Compact wine tile for "Не то вино?" / "Похожие вина" lists.
-defineProps<{ wine: WineShort, showScore?: boolean }>()
+// Compact wine tile for "Не то вино?" / "Похожие вина" / "Аналоги" lists.
+defineProps<{ wine: WineShort, showScore?: boolean, reason?: string }>()
 </script>
 
 <template>
@@ -13,6 +13,7 @@ defineProps<{ wine: WineShort, showScore?: boolean }>()
     <div class="tile__name">{{ wine.name }}</div>
     <div class="tile__winery">{{ wine.winery }}</div>
     <div v-if="showScore" class="tile__score">сходство {{ Math.round(wine.score * 100) }}%</div>
+    <div v-if="reason" class="tile__reason">{{ reason }}</div>
   </NuxtLink>
 </template>
 
@@ -23,4 +24,5 @@ defineProps<{ wine: WineShort, showScore?: boolean }>()
 .tile__name { font-weight: 600; font-size: 14px; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .tile__winery { font-size: 13px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tile__score { font-size: 12px; color: var(--text-3); }
+.tile__reason { font-size: 12px; line-height: 1.35; color: var(--wine); }
 </style>

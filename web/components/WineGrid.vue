@@ -2,12 +2,12 @@
 import type { WineShort } from '~/types/api'
 
 // Horizontal scroller on phones, grid on wider screens.
-defineProps<{ wines: WineShort[], showScore?: boolean }>()
+defineProps<{ wines: (WineShort & { reason?: string })[], showScore?: boolean }>()
 </script>
 
 <template>
   <div class="grid">
-    <WineTile v-for="w in wines" :key="w.slug" :wine="w" :show-score="showScore" />
+    <WineTile v-for="w in wines" :key="w.slug" :wine="w" :show-score="showScore" :reason="w.reason" />
   </div>
 </template>
 

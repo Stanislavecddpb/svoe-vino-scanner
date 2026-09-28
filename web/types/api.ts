@@ -9,6 +9,12 @@ export interface WineShort {
   image_url: string
 }
 
+/** "Аналоги из других виноделен" */
+export interface Analog extends WineShort {
+  category: string | null
+  reason: string
+}
+
 export interface SearchResult {
   top1: WineShort | null
   top5: WineShort[]

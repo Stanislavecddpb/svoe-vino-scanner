@@ -1,5 +1,7 @@
 <script setup lang="ts">
-// Scan screen: photo -> /v1/search -> wine card (or "not in catalog" with similar wines).
+import type { Analog } from '~/types/api'
+
+// Scan screen: photo -> /v1/search -> wine card (or "not in catalog" with similar wines and analogs).
 const scan = useScan()
 const loading = ref(false)
 const error = ref<string | null>(null)
@@ -7,6 +9,14 @@ const camera = ref<HTMLInputElement>()
 const gallery = ref<HTMLInputElement>()
 
 const notFound = computed(() => scan.value?.result.status === 'not_found' ? scan.value : null)
+
+// Not in the catalog: offer the same style from other wineries, based on the closest-looking wine
+const notFoundAnalogs = ref<Analog[]>([])
+watch(notFound, async (nf) => {
+  notFoundAnalogs.value = []
+  const top = nf?.result.top1?.slug
+  if (top) notFoundAnalogs.value = await $fetch<Analog[]>(`/v1/wines/${encodeURIComponent(top)}/analogs?limit=6`).catch(() => [])
+}, { immediate: true })
 
 onMounted(() => {
   // a finished "not found" scan stays on screen; anything else starts fresh
@@ -63,10 +73,14 @@ async function onFile(e: Event) {
     <section v-if="notFound" class="not-found">
       <div class="notice">
         <img :src="notFound.photoUrl" class="photo" alt="Ваше фото">
-        <span><b>Точного совпадения нет в каталоге.</b> Возможно, этого вина ещё нет на платформе — вот самые похожие.</span>
+        <span><b>Точного совпадения нет в каталоге.</b> Возможно, этого вина ещё нет на платформе — вот самые похожие и чем его заменить.</span>
       </div>
       <h2 class="section-title">Похожие вина</h2>
       <WineGrid :wines="notFound.result.top5" />
+      <template v-if="notFoundAnalogs.length">
+        <h2 class="section-title">Аналоги из других виноделен</h2>
+        <WineGrid :wines="notFoundAnalogs" />
+      </template>
     </section>
 
     <ul v-else-if="!loading" class="tips muted">
