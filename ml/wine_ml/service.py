@@ -35,9 +35,14 @@ def create_app(embedder_factory: Callable, ocr_factory: Callable | None = None) 
 
     @app.on_event("startup")
     def _warmup() -> None:
-        get_embedder()
+        # load the models and run one dummy inference: CUDA kernels are compiled on first use,
+        # otherwise the first real request pays for it
+        from PIL import Image
+
+        dummy = Image.new("RGB", (640, 480), (200, 180, 160))
+        get_embedder().embed([normalize_image(dummy)])
         if get_ocr:
-            get_ocr()
+            get_ocr().read(dummy)
 
     async def read_upload(image: UploadFile):
         data = await image.read()

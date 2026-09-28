@@ -35,3 +35,11 @@ def test_large_image_downscaled():
 def test_load_image_rejects_garbage():
     with pytest.raises(ValueError):
         load_image(b"not an image")
+
+
+def test_heic_iphone_photo_is_readable():
+    pillow_heif = pytest.importorskip("pillow_heif")
+    b = io.BytesIO()
+    pillow_heif.from_pillow(Image.new("RGB", (64, 48), (120, 30, 40))).save(b, quality=80)
+    im = load_image(b.getvalue())
+    assert normalize_image(im).size == (64, 64)

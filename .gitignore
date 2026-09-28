@@ -18,3 +18,6 @@ reports/cache/
 
 # real test photos (personal, large)
 eval/real/photos/
+
+# presentation template and working files
+*.pptx

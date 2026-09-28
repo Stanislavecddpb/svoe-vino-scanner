@@ -17,6 +17,7 @@ dependencies = [
   "pgvector>=0.2",
   "tqdm",
   "easyocr>=1.7",
+  "pillow-heif",  # iPhone photos (HEIC)
 ]
 
 [project.optional-dependencies]
