@@ -59,6 +59,7 @@ docker compose -f docker-compose.yml -f docker-compose.gpu.yml --profile full up
 | `GET` | `/v1/wines/:slug` | карточка: `slug, name, category, color, region, grapes, description, winery, image_url` |
 | `GET` | `/v1/wines/:slug/image` | фото из каталога |
 | `GET` | `/v1/wines/:slug/similar?limit=8` | похожие вина по визуальному сходству эталонов |
+| `POST` | `/v1/sommelier` JSON `{food, sweetness, body}` | «Цифровой сомелье»: до 6 вин с объяснением; `food`: meat/poultry/fish/cheese/veggies/dessert/aperitif, `sweetness`: dry/medium/sweet/sparkling, `body`: light/rich |
 | `GET` | `/v1/wines/:slug/analogs?limit=6` | **аналоги из других виноделен**: `[{slug, name, winery, category, score, reason, image_url}]` |
 | `GET` | `/health` | `{status, engine, model, db: {wines, indexed}, ml}` |
 
@@ -68,7 +69,7 @@ docker compose -f docker-compose.yml -f docker-compose.gpu.yml --profile full up
 
 ## Интерфейс
 
-`/` — сканер (камера/галерея), `/wine/:slug` — карточка в стиле vino-svoe.ru: фото, характеристики, описание, «Не то вино?» (остальные кандидаты), **«Аналоги из других виноделен»**, «Похожие вина». Если вина нет в каталоге — похожие вина и аналоги для ближайшего по виду.
+`/` — сканер (камера/галерея), `/wine/:slug` — карточка в стиле vino-svoe.ru: фото, характеристики, описание, «Не то вино?» (остальные кандидаты), **«Аналоги из других виноделен»**, «Похожие вина». Если вина нет в каталоге — похожие вина и аналоги для ближайшего по виду. `/sommelier` — «Цифровой сомелье»: 3 вопроса (к чему, вкус, характер) → подборка из каталога по правилам сочетаний (`web/server/utils/sommelier.ts`), без LLM.
 
 **Аналоги** (`ml/wine_ml/analogs.py`, `ml/scripts/build_analogs.py` → таблица `wine_analogs`): вино другой винодельни того же цвета, типа (игристое / тихое) и сладости (неизвестная = сухое / брют); ранжирование — совпадение сортов (0.5), похожесть описания (0.35, TF-IDF), регион (0.15); одна позиция на винодельню; для каждого аналога — объяснение «Тот же сорт — … · сухое белое · Крым · ноты крыжовника, лайма».
 

@@ -83,7 +83,11 @@ async function onFile(e: Event) {
       </template>
     </section>
 
-    <ul v-else-if="!loading" class="tips muted">
+    <NuxtLink v-if="!notFound && !loading" to="/sommelier" class="som-link">
+      <b>Не знаете, что выбрать?</b> Цифровой сомелье подберёт вино к блюду за 3 вопроса →
+    </NuxtLink>
+
+    <ul v-if="!notFound && !loading" class="tips muted">
       <li>Этикетка целиком в кадре</li>
       <li>Без сильных бликов</li>
       <li>Можно под углом и у полки</li>
@@ -98,6 +102,8 @@ async function onFile(e: Event) {
 .hero p { margin: 0; line-height: 1.5; }
 .actions { display: grid; gap: 10px; margin: 28px 0 16px; }
 @media (min-width: 640px) { .actions { grid-template-columns: 1fr 1fr; } }
+.som-link { display: block; margin-top: 8px; padding: 12px 14px; border-radius: var(--radius-s); background: var(--sand); font-size: 14px; line-height: 1.4; }
+.som-link b { color: var(--wine); }
 .tips { list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 8px; font-size: 14px; }
 .tips li::before { content: '·'; color: var(--wine); font-weight: 700; margin-right: 8px; }
 .not-found { margin-top: 8px; }
