@@ -31,7 +31,7 @@ VectorEngine: `/analyze` (вектор + OCR) → pgvector Top-`RERANK_K` по �
 | OCR-переранжирование | `ml/wine_ml/ocr.py`, `ml/wine_ml/text_match.py` | EasyOCR (ru+en) читает этикетку; для каждого из Top-10: доля названия/винодельни, подтверждённая текстом (нечёткое сравнение в транслите, веса IDF внутри Top-10, вес текста падает к краям кадра — соседние бутылки), штраф за противоречия (цвет, сахар, год). final = visual + α·text − β·conflicts. Та же функция в `evaluate.py --ocr`. |
 | Выдача карточки | `web/server/routes/v1/wines/[slug]/`, `web/pages/wine/[slug].vue` | карточка вина из таблицы `wines` + фото каталога. |
 | Уверенность | `web/server/utils/search.ts`, `status.ts` | `score` = итоговый скор; `margin` = score₁ − score₂; `status` = `confident` / `uncertain` / `not_found` по порогам `CONFIDENCE_MARGIN` (по финальному скору) и `NOT_FOUND_SCORE` (по лучшему **визуальному** скору: текст не должен «вытягивать» вино, не похожее на фото). |
-| Доп. функционал | — | следующий этап (сомелье, аналоги) — строится поверх `/v1/search` и `/v1/wines`. |
+| Доп. функционал | `ml/wine_ml/analogs.py`, `web/server/routes/v1/wines/[slug]/analogs.get.ts` | «Аналоги из других виноделен»: считаются офлайн по сортам, описанию и региону (таблица `wine_analogs`), показываются на карточке и на экране «нет в каталоге». |
 
 ## Recognition Engine — точка подключения CV
 

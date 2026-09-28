@@ -38,6 +38,7 @@ Push-Location web; npm ci; Check; Pop-Location
 Step "Postgres + pgvector (docker)"
 docker compose up -d --wait db; Check
 Get-Content db\migrations\002_views.sql | docker compose exec -T db psql -q -U wine; Check   # no-op on a fresh DB
+Get-Content db\migrations\003_analogs.sql | docker compose exec -T db psql -q -U wine; Check
 
 Step "Catalog: unambiguous positions"
 & $py ml\scripts\build_catalog.py; Check
@@ -48,6 +49,7 @@ $env:MODEL_NAME = $Model
 if ($Cpu) { $env:DEVICE = "cpu" }
 & $py ml\scripts\build_index.py; Check   # views: full + label_mid + label_low
 & $py ml\scripts\find_twins.py; Check    # data/catalog/twins.csv
+& $py ml\scripts\build_analogs.py; Check # "Аналоги из других виноделен"
 
 Step "OCR models (EasyOCR ru+en, ~100 MB) - downloaded now so the demo works offline"
 & $py -c "from wine_ml.ocr import OcrEngine; OcrEngine('cpu')"; Check
