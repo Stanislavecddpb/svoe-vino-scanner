@@ -62,3 +62,15 @@ def test_conflicts_color_and_sugar():
     assert conflicts(ocr, tokens("Игристое белое полусладкое")) == 1  # sugar differs
     assert conflicts(ocr, tokens("Игристое белое брют")) == 0
     assert conflicts(ocr, tokens("Игристое")) == 0                    # nothing to contradict
+
+
+def test_conflicts_survive_ocr_typos_in_colour():
+    assert conflicts(tokens("ПОЗДНИЙ СБОР траское"), tokens("Поздний сбор Белое")) == 1  # "траское" = красное
+
+
+def test_grape_on_the_label_picks_the_wine_of_that_grape():
+    ocr = [{"text": "VELVET SEASON", "conf": 1.0, "cx": 0.5, "cy": 0.5, "h": 0.1},
+           {"text": "МУСКАТ ОТТОНЕЛЬ", "conf": 1.0, "cx": 0.5, "cy": 0.6, "h": 0.05}]
+    cands = [{"slug": "riesling", "name": "Velvet Season", "winery": "Фанагория", "grapes": "Рислинг", "visual": 0.70},
+             {"slug": "muscat", "name": "Velvet Season", "winery": "Фанагория", "grapes": "Мускат Оттонель", "visual": 0.69}]
+    assert rerank(ocr, cands, alpha=0.2, beta=0.05)[0]["slug"] == "muscat"

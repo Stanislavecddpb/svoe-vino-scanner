@@ -63,18 +63,24 @@ def test_build_catalog_rules(tmp_path):
     # only banners behind a name: still ambiguous
     banner_png(tmp_path / "e_0123456789.png")
     banner_png(tmp_path / "e_abcdefabcd.png", color=(200, 60, 60))
+    # the same non-studio picture uploaded twice (no white border): the newest file wins too
+    banner_png(tmp_path / "h_0123456789.png")
+    banner_png(tmp_path / "h_abcdefabcd.png", color=(34, 122, 204))  # re-encoded: bytes differ
+    os.utime(tmp_path / "h_0123456789.png", (2_000_000, 2_000_000))
+    os.utime(tmp_path / "h_abcdefabcd.png", (1_000_000, 1_000_000))
     # Strapi transliteration differs from ours
     bottle_png(tmp_path / "Chernaya_Lvicza_0123456789.png")
     rows = [row("a", "a.webp"), row("a", "a.webp"), row("b", "Screenshot_7.webp"), row("c", "c.webp"),
             row("d1", "a2.webp"), row("d2", "a2.webp"), row("e", "e.webp"),
-            row("f", "missing.webp"), row("g", "Черная Львица.webp")]
+            row("f", "missing.webp"), row("g", "Черная Львица.webp"), row("h", "h.webp")]
     bottle_png(tmp_path / "a2_0123456789.png")
     wines, excl = build_catalog(rows, sorted(tmp_path.iterdir()))
     by = {w["slug"]: w for w in wines}
-    assert sorted(by) == ["a", "b", "c", "d1", "d2", "g"]
+    assert sorted(by) == ["a", "b", "c", "d1", "d2", "g", "h"]
     assert by["a"]["src_file"].name == "a_0123456789.png" and by["a"]["mapping"] == "exact"
     assert by["b"]["src_file"].name == "Screenshot_7_abcdefabcd.png" and by["b"]["mapping"] == "product_shot"
     assert by["c"]["src_file"].name == "c_abcdefabcd.png" and by["c"]["mapping"] == "newest_reupload"
     assert by["d1"]["mapping"] == by["d2"]["mapping"] == "shared_photo"
     assert by["g"]["src_file"].name == "Chernaya_Lvicza_0123456789.png"
+    assert by["h"]["src_file"].name == "h_0123456789.png" and by["h"]["mapping"] == "newest_reupload"
     assert {e["slug"]: e["reason"] for e in excl} == {"e": "ambiguous_file", "f": "file_not_found"}

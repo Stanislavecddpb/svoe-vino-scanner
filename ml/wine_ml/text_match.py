@@ -28,6 +28,7 @@ _TRANSLIT = dict(zip(
 ))
 
 FUZZY_MIN = 0.8        # normalized Levenshtein similarity for a token match
+GROUP_FUZZY_MIN = 0.7  # colour/sugar words: long and few, so a softer match survives OCR typos ("траское")
 CENTER_SIGMA_X = 0.2   # OCR token weight falls off with horizontal distance from the centre
 CENTER_SIGMA_Y = 0.35
 
@@ -86,7 +87,7 @@ def _group_values(toks: list[str]) -> dict[str, set[str]]:
     found: dict[str, set[str]] = {}
     for group, values in GROUPS.items():
         for value, words in values.items():
-            if any(fuzzy_sim(t, w) >= FUZZY_MIN for t in toks for w in words):
+            if any(fuzzy_sim(t, w) >= GROUP_FUZZY_MIN for t in toks for w in words):
                 found.setdefault(group, set()).add(value)
     years = {t for t in toks if YEAR_RE.match(t)}
     if years:
@@ -112,8 +113,8 @@ def _ocr_weighted_tokens(ocr: list[dict]) -> list[tuple[str, float]]:
 
 
 def candidate_name_tokens(c: dict) -> list[str]:
-    """What is printed on a label: wine name and winery."""
-    return list(dict.fromkeys(tokens(c.get("name")) + tokens(c.get("winery"))))
+    """What is printed on a label: wine name, winery and grape varieties."""
+    return list(dict.fromkeys(tokens(c.get("name")) + tokens(c.get("winery")) + tokens(c.get("grapes"))))
 
 
 def candidate_attr_tokens(c: dict) -> list[str]:

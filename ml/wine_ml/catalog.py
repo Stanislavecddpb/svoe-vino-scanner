@@ -102,7 +102,7 @@ def is_product_shot(path: Path) -> bool:
 def _look_alike(paths: list[Path]) -> bool:
     thumbs = []
     for p in paths:
-        im = _on_white(p).convert("L")
+        im = _on_white(p).convert("RGB")  # colour, not grey: different labels can share brightness
         thumbs.append(np.asarray(im.resize((32, 64)), dtype=np.float32))
     return all(np.abs(t - thumbs[0]).mean() < REUPLOAD_MAX_DIFF for t in thumbs[1:])
 
@@ -140,6 +140,8 @@ def resolve_file(candidates: list[Path]) -> tuple[Path | None, str]:
         return products[0], "product_shot"
     if len(products) > 1 and _look_alike(products):
         return max(products, key=lambda p: (p.stat().st_mtime, p.name)), "newest_reupload"
+    if not products and _look_alike(candidates):  # the same non-studio picture uploaded twice
+        return max(candidates, key=lambda p: (p.stat().st_mtime, p.name)), "newest_reupload"
     return None, ""
 
 
